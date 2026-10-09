@@ -1,0 +1,396 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+
+/* =========================================================
+   AUTH PAGE
+========================================================= */
+
+.auth-page {
+  min-height: 100vh;
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  background: #ffffff;
+
+  font-family: 'Inter', sans-serif;
+  color: #181818;
+}
+
+
+/* =========================================================
+   LEFT PANEL
+========================================================= */
+
+.auth-panel {
+  min-height: 100vh;
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 32px 64px;
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.auth-brand-logo {
+  width: 28px !important;
+  height: 28px !important;
+
+  max-width: 28px !important;
+  max-height: 28px !important;
+
+  min-width: 28px;
+  min-height: 28px;
+
+  object-fit: contain;
+  object-position: center;
+
+  display: block;
+
+  flex: 0 0 28px;
+}
+
+.auth-brand-name {
+  font-size: 24px;
+  font-weight: 500;
+
+  line-height: 1;
+
+  color: #151515;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.auth-content {
+  width: min(100%, 530px);
+
+  margin: auto 0;
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.auth-heading {
+  margin-bottom: 24px;
+}
+
+.auth-heading h1 {
+  margin: 0 0 8px;
+
+  font-size: 28px;
+  line-height: 1.2;
+
+  font-weight: 600;
+
+  letter-spacing: -0.8px;
+
+  color: #161616;
+}
+
+.auth-heading p {
+  max-width: 480px;
+
+  margin: 0;
+
+  font-size: 16px;
+  line-height: 1.35;
+
+  font-weight: 400;
+
+  color: #a2a2a2;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.auth-form {
+  width: 100%;
+}
+
+.auth-field {
+  margin-bottom: 16px;
+}
+
+.auth-field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 14px;
+  line-height: 1.3;
+
+  font-weight: 500;
+
+  color: #1c1c1c;
+}
+
+.auth-field input,
+.auth-field select {
+  width: 100%;
+  height: 42px;
+
+  padding: 0 14px;
+
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+
+  outline: none;
+
+  background: #ffffff;
+  color: #1a1a1a;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.auth-field input::placeholder {
+  color: #b6b6b6;
+}
+
+.auth-field select {
+  cursor: pointer;
+
+  color: #8e8e8e;
+}
+
+.auth-field select:valid {
+  color: #1a1a1a;
+}
+
+.auth-field input:focus,
+.auth-field select:focus {
+  border-color: #ad0019;
+
+  box-shadow:
+    0 0 0 3px rgba(173, 0, 25, 0.08);
+}
+
+
+/* =========================================================
+   MESSAGES
+========================================================= */
+
+.auth-message {
+  width: 100%;
+
+  padding: 11px 13px;
+
+  margin-bottom: 14px;
+
+  border-radius: 6px;
+
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.auth-message-error {
+  background: #fff1f2;
+
+  border: 1px solid #f3c5ca;
+
+  color: #a90019;
+}
+
+.auth-message-success {
+  background: #f0faf3;
+
+  border: 1px solid #c5e7cf;
+
+  color: #24743c;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.auth-submit {
+  width: 100%;
+  height: 42px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: #ad0019;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.auth-submit:hover:not(:disabled) {
+  background: #930016;
+}
+
+.auth-submit:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.auth-submit:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   LOGIN LINK
+========================================================= */
+
+.auth-register {
+  margin: 22px 0 0;
+
+  text-align: center;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  color: #8e8e8e;
+}
+
+.auth-register a {
+  margin-left: 5px;
+
+  color: #ad0019;
+
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.auth-register a:hover {
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.auth-footer {
+  margin-top: auto;
+
+  font-size: 12px;
+
+  color: #222222;
+}
+
+
+/* =========================================================
+   RIGHT IMAGE PANEL
+========================================================= */
+
+.auth-image-panel {
+  min-height: 100vh;
+
+  display: flex;
+
+  padding: 32px;
+}
+
+.auth-image-wrapper {
+  width: 100%;
+  height: 100%;
+
+  min-height: calc(100vh - 64px);
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f4f4f4,
+      #ffffff
+    );
+}
+
+.auth-image {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .auth-page {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-panel {
+    min-height: 100vh;
+
+    padding: 28px 40px;
+  }
+
+  .auth-image-panel {
+    display: none;
+  }
+
+  .auth-content {
+    margin: auto 0;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .auth-panel {
+    padding: 24px;
+  }
+
+  .auth-heading h1 {
+    font-size: 25px;
+  }
+
+  .auth-heading p {
+    font-size: 14px;
+  }
+
+  .auth-brand-name {
+    font-size: 23px;
+  }
+
+}
