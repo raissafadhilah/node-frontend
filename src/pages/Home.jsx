@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { mockHome } from '../data/homeMockData'; // Data Dummy untuk Frond End - Jeff
 
 import { Link } from 'react-router-dom';
 
@@ -36,9 +37,18 @@ function Home() {
         } else {
           setCurrentUser(null);
         }
-      } catch (err) {
-        setError(err.message);
-      }
+      // } catch (err) {
+      //   setError(err.message);   --SEBELUMNYA DINAUNGI RAISSA
+      // } 
+        } catch (err) {
+          console.warn(
+            'Backend belum tersedia. Menggunakan data dummy untuk frontend.',
+            err
+          );
+
+  setHome(mockHome);
+  setCurrentUser(null);
+}
     }
 
     loadHome();
