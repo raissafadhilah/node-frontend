@@ -73,14 +73,10 @@ function Register() {
         {/* BRAND */}
         <div className="auth-brand">
           <img
-            src="/node-logo.png"
-            alt="Node logo"
-            className="auth-brand-logo"
+            src="/NodeLogo.png"
+            alt="Node"
+            className="auth-brand-Logo"
           />
-
-          <span className="auth-brand-name">
-            node
-          </span>
         </div>
 
         {/* FORM AREA */}

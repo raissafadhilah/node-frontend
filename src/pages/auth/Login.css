@@ -1,65 +1,128 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-
+/* Layout utama */
 .auth-page {
   min-height: 100vh;
   width: 100%;
-
   display: grid;
-  grid-template-columns: 1fr 1fr;
-
+  grid-template-columns: 1.04fr 0.96fr;
   background: #ffffff;
-
   font-family: 'Inter', sans-serif;
   color: #181818;
 }
-
-
-/* panel */
-.auth-panel {
-  min-height: 100vh;
-
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-
-  padding: 32px 64px;
-}
-
 
 /* brand */
 .auth-brand {
   display: flex;
   align-items: center;
-  gap: 8px;
 }
 
-.auth-brand-logo {
-  width: 28px !important;
-  height: 28px !important;
-  max-width: 28px !important;
-  max-height: 28px !important;
-  min-width: 28px;
-  min-height: 28px;
-  object-fit: contain;
-  object-position: center;
+.auth-brand-Logo {
   display: block;
-  flex: 0 0 28px;
+  width: 120px;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
 }
 
-.auth-brand-name {
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 1;
-  color: #151515;
+/* Panel kiri */
+.auth-panel {
+  min-height: 100vh;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 64px;
+  box-sizing: border-box;
+}
+
+/* Area form */
+
+/* Panel gambar kanan */
+.auth-image-panel {
+  min-width: 0;
+  min-height: 100vh;
+  display: flex;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+.auth-image-wrapper {
+  width: 100%;
+  height: calc(100vh - 64px);
+  min-height: 500px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #f4f4f4;
+}
+
+.auth-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Tombol */
+.auth-submit {
+  width: 100%;
+  height: 42px;
+  border: none;
+  border-radius: 6px;
+  background: #ad0019;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.auth-submit:hover:not(:disabled) {
+  background: #930016;
+}
+
+.auth-submit:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Tablet dan layar kecil */
+@media (max-width: 1000px) {
+  .auth-page {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-panel {
+    padding: 28px 40px;
+  }
+
+}
+
+@media (max-width: 600px) {
+  .auth-panel {
+    padding: 24px;
+  }
+
+  .auth-heading h1 {
+    font-size: 25px;
+  }
+
+  .auth-heading p {
+    font-size: 14px;
+  }
+
+  .auth-options {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
 }
 
 /* content */
+/* code dibawah ini mindahin section form sedikit ke kanan */
 .auth-content {
-  width: min(100%, 530px);
-
-  margin: auto 0;
+  transform: translateX(30px);
 }
 
 .auth-heading {
@@ -90,7 +153,6 @@
 
   color: #a2a2a2;
 }
-
 
 /* form */
 .auth-form {
@@ -230,46 +292,6 @@
   color: #24743c;
 }
 
-
-/* =========================================================
-   SIGN IN BUTTON
-========================================================= */
-
-.auth-submit {
-  width: 100%;
-  height: 42px;
-
-  border: none;
-  border-radius: 6px;
-
-  background: #ad0019;
-  color: #ffffff;
-
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition:
-    background 0.18s ease,
-    transform 0.18s ease;
-}
-
-.auth-submit:hover:not(:disabled) {
-  background: #930016;
-}
-
-.auth-submit:active:not(:disabled) {
-  transform: translateY(1px);
-}
-
-.auth-submit:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-
 /* =========================================================
    REGISTER
 ========================================================= */
@@ -316,33 +338,6 @@
 /* =========================================================
    RIGHT IMAGE PANEL
 ========================================================= */
-
-.auth-image-panel {
-  min-height: 100vh;
-
-  display: flex;
-
-  padding: 32px;
-}
-
-.auth-image-wrapper {
-  width: 100%;
-  height: 100%;
-
-  min-height: calc(100vh - 64px);
-
-  overflow: hidden;
-
-  border-radius: 20px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f4f4f4,
-      #ffffff
-    );
-}
-
 .auth-image {
   width: 100%;
   height: 100%;
@@ -372,10 +367,6 @@
   .auth-image-panel {
     display: none;
   }
-
-  .auth-content {
-    margin: auto 0;
-  }
 }
 
 
@@ -395,10 +386,5 @@
 
   .auth-options {
     margin-bottom: 20px;
-  }
-
-
-  .auth-brand-name {
-    font-size: 23px;
   }
 }

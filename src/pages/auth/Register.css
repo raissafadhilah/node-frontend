@@ -46,33 +46,14 @@
   gap: 8px;
 }
 
-.auth-brand-logo {
-  width: 28px !important;
-  height: 28px !important;
-
-  max-width: 28px !important;
-  max-height: 28px !important;
-
-  min-width: 28px;
-  min-height: 28px;
-
-  object-fit: contain;
-  object-position: center;
-
+.auth-brand-Logo {
   display: block;
-
-  flex: 0 0 28px;
+  width: 120px;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
 }
-
-.auth-brand-name {
-  font-size: 24px;
-  font-weight: 500;
-
-  line-height: 1;
-
-  color: #151515;
-}
-
 
 /* =========================================================
    CONTENT

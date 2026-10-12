@@ -66,20 +66,13 @@ function Login() {
       <section className="auth-panel">
 
         {/* BRAND */}
-        <div
-          className="auth-brand"
-          aria-label="Node"
-        >
-          <img
-            src="/node-logo.png"
-            alt="Node logo"
-            className="auth-brand-logo"
-          />
-
-          <span className="auth-brand-name">
-            node
-          </span>
-        </div>
+        <div className="auth-brand">
+  <img
+    src="/NodeLogo.png"
+    alt="Node"
+    className="auth-brand-Logo"
+  />
+</div>
 
         {/* FORM AREA */}
         <div className="auth-content">
