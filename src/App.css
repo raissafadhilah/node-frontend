@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* =========================================================
    NODE DESIGN SYSTEM
@@ -22,11 +22,7 @@
 
   --node-green: #dff7e8;
   --node-green-text: #23824b;
-
-  --node-shadow:
-    0 4px 18px rgba(0, 0, 0, 0.025);
 }
-
 
 /* =========================================================
    GLOBAL
@@ -34,19 +30,10 @@
 
 .feed-page {
   min-height: 100vh;
-
   background: var(--node-bg);
   color: var(--node-text);
-
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 .feed-page *,
@@ -54,107 +41,91 @@
 .feed-page input,
 .feed-page textarea {
   font-family: inherit;
+  box-sizing: border-box;
 }
 
 .feed-page button {
   cursor: pointer;
 }
 
+.page-state {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--node-bg);
+}
+
+.empty-state {
+  color: var(--node-muted);
+  font-size: 13px;
+}
 
 /* =========================================================
    HEADER
 ========================================================= */
 
 .top-header {
-  height: 92px;
-
-  display: flex;
-  align-items: center;
-
-  padding: 0 32px;
-
-  background: var(--node-white);
-
-  border-bottom: 1px solid var(--node-border);
-
   position: sticky;
   top: 0;
-
   z-index: 100;
-}
-
-
-/* ---------------------------------------------------------
-   BRAND
---------------------------------------------------------- */
-
-.brand {
-  min-width: 245px;
 
   display: flex;
   align-items: center;
+  gap: 16px;
 
-  gap: 10px;
+  height: 70px;
+  padding: 0 24px;
+
+  background: var(--node-white);
+  border-bottom: 1px solid var(--node-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 195px;
+  flex-shrink: 0;
 }
 
 .brand-logo {
-  width: 40px;
-  height: 40px;
-
   display: block;
-
+  width: 120px;
+  height: 34px;
   object-fit: contain;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
 }
 
-.brand-name {
-  margin: 0;
-
-  color: var(--node-text);
-
-  font-size: 25px;
-  font-weight: 500;
-
-  letter-spacing: -1.2px;
-}
-
-
-/* ---------------------------------------------------------
-   SEARCH
---------------------------------------------------------- */
+/* Search */
 
 .search-bar {
-  width: 100%;
-  max-width: 530px;
-
-  height: 44px;
-
   display: flex;
   align-items: center;
-
   gap: 12px;
 
+  width: 100%;
+  max-width: 398px;
+  height: 40px;
   padding: 0 16px;
 
-  background: #ffffff;
-
+  background: var(--node-white);
   border: 1px solid #dcdcdc;
-
-  border-radius: 8px;
+  border-radius: 7px;
 }
 
 .search-icon {
-  width: 21px;
-  height: 21px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   flex-shrink: 0;
 
-  color: #9a9a9a;
-
-  font-size: 20px;
+  width: 21px;
+  height: 21px;
+  color: var(--node-muted);
 }
 
 .search-icon svg {
@@ -164,62 +135,48 @@
 
 .search-bar input {
   width: 100%;
-
+  min-width: 0;
+  padding: 0;
   border: none;
   outline: none;
-
   background: transparent;
-
   color: var(--node-text);
-
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .search-bar input::placeholder {
   color: #a5a5a5;
 }
 
-
-/* ---------------------------------------------------------
-   HEADER ACTIONS
---------------------------------------------------------- */
+/* Header actions */
 
 .header-actions {
-  margin-left: auto;
-
   display: flex;
   align-items: center;
-
-  gap: 17px;
+  gap: 14px;
+  margin-left: auto;
 }
 
-
-/* NOTIFICATION */
-
 .notification-button {
-  width: 44px;
-  height: 44px;
-
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 38px;
 
+  width: 38px;
+  height: 38px;
   padding: 0;
 
-  background: #ffffff;
-
+  color: var(--node-text);
+  background: var(--node-white);
   border: 1px solid #eeeeee;
-
   border-radius: 50%;
 
-  color: var(--node-text);
-
-  transition: 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .notification-button:hover {
   background: var(--node-red-soft);
-
   color: var(--node-red);
 }
 
@@ -228,144 +185,131 @@
   height: 21px;
 }
 
-
-/* SIGN UP */
-
 .signup-button {
-  min-width: 152px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  height: 40px;
-
-  padding: 0 24px;
-
-  border: none;
-
-  border-radius: 7px;
-
-  background: var(--node-red);
+  min-width: 114px;
+  height: 36px;
+  padding: 0 18px;
 
   color: #ffffff;
+  background: var(--node-red);
+  border: none;
+  border-radius: 7px;
 
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
 
-  transition: 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 .signup-button:hover {
   background: var(--node-red-dark);
 }
 
-
-/* LOGGED-IN USER */
-
 .header-user {
   display: flex;
   align-items: center;
-
   gap: 9px;
   min-width: 0;
+  text-decoration: none;
 }
 
 .header-user-avatar {
-  width: 36px;
-  height: 36px;
-
-  flex: 0 0 36px;
-
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 36px;
+
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
 
   border-radius: 50%;
-
   background: #dfe3f2;
   color: #24283a;
 
   font-size: 11px;
   font-weight: 600;
-
-  overflow: hidden;
 }
+
 .header-user-avatar img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 .header-user-name {
   max-width: 180px;
-
   overflow: hidden;
 
   color: var(--node-text);
-
   font-size: 13px;
   font-weight: 500;
-
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-
 /* =========================================================
-   MAIN APP LAYOUT
+   MAIN LAYOUT
 ========================================================= */
 
 .feed-layout {
+  position: relative;
   display: flex;
-
-  min-height: calc(100vh - 92px);
+  align-items: stretch;
+  min-height: calc(100vh - 70px);
 }
-
 
 /* =========================================================
    SIDEBAR
 ========================================================= */
 
 .sidebar {
-  width: 278px;
+  position: relative;
+  z-index: 2;
 
-  flex-shrink: 0;
-
-  padding: 16px 24px 32px;
+  flex: 0 0 208px;
+  width: 208px;
+  padding: 11px 17px 28px;
 
   background: var(--node-white);
-
   border-right: 1px solid var(--node-border);
 }
 
+.sidebar-hidden {
+  display: none !important;
+}
 
-/* ---------------------------------------------------------
-   ASK / POST
---------------------------------------------------------- */
+/* Ask / Post */
 
 .ask-post-button {
-  width: 100%;
-
-  height: 48px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 9px;
 
-  margin-bottom: 20px;
-
-  border: none;
-
-  border-radius: 9px;
-
-  background: var(--node-red);
+  width: 100%;
+  height: 37px;
+  margin-bottom: 16px;
+  padding: 0 8px;
 
   color: #ffffff;
+  background: var(--node-red);
+  border: none;
+  border-radius: 8px;
 
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
+  text-decoration: none;
 
-  transition: 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 .ask-post-button:hover {
@@ -373,746 +317,11 @@
 }
 
 .ask-post-icon {
-  width: 20px;
-  height: 20px;
-
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 17px;
 
-  font-size: 18px;
-}
-
-
-/* =========================================================
-   SIDEBAR MENU
-========================================================= */
-
-.sidebar-section {
-  margin-top: 18px;
-}
-
-.sidebar-label {
-  margin: 0 0 8px;
-
-  color: #8d8d8d;
-
-  font-size: 11px;
-  font-weight: 600;
-
-  letter-spacing: 0.04em;
-}
-
-.sidebar-item {
-  width: 100%;
-
-  height: 40px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  padding: 0 14px;
-
-  border: none;
-
-  border-radius: 7px;
-
-  background: transparent;
-
-  color: #929292;
-
-  font-size: 14px;
-  font-weight: 500;
-
-  text-align: left;
-
-  transition: 0.2s ease;
-}
-
-.sidebar-item.active {
-  background: var(--node-red-soft);
-
-  color: var(--node-red);
-
-  font-weight: 600;
-}
-
-.sidebar-item.disabled {
-  cursor: default;
-
-  color: #b0b0b0;
-}
-
-.sidebar-item svg {
-  width: 20px;
-  height: 20px;
-
-  flex-shrink: 0;
-}
-
-
-/* =========================================================
-   FEED MAIN
-========================================================= */
-
-.feed-main {
-  flex: 1;
-
-  min-width: 0;
-
-  padding:
-    16px
-    38px
-    60px;
-}
-
-
-/* =========================================================
-   TOP TRENDING AREA
-========================================================= */
-
-.feed-top {
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    200px;
-
-  gap: 18px;
-
-  align-items: start;
-}
-
-
-/* =========================================================
-   TRENDING DISCUSSIONS
-========================================================= */
-
-.trending-discussions {
-  min-width: 0;
-}
-
-
-/* HEADING */
-
-.trending-discussions .section-heading {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  margin: 0 0 8px;
-}
-
-.trending-discussions .section-heading h2 {
-  margin: 0;
-
-  color: var(--node-text);
-
-  font-size: 20px;
-  font-weight: 500;
-
-  letter-spacing: -0.6px;
-}
-
-.see-more-button {
-  padding: 0;
-
-  border: none;
-
-  background: transparent;
-
-  color: var(--node-red);
-
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.see-more-button:hover {
-  text-decoration: underline;
-}
-
-
-/* =========================================================
-   TRENDING DISCUSSION CARDS
-========================================================= */
-
-.trending-discussion-list {
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 10px;
-}
-
-
-/* CARD */
-
-.trending-discussion-card {
-  min-width: 0;
-
-  min-height: 174px;
-
-  padding: 16px;
-
-  background: var(--node-white);
-
-  border: none;
-
-  border-radius: 9px;
-
-  box-shadow: none;
-
-  overflow: hidden;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.trending-discussion-card:hover {
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 5px 15px rgba(0, 0, 0, 0.04);
-}
-
-
-/* ---------------------------------------------------------
-   DISCUSSION USER
---------------------------------------------------------- */
-
-.trending-discussion-card .discussion-user {
-  display: flex;
-  align-items: center;
-
-  gap: 8px;
-
-  margin-bottom: 10px;
-}
-
-.trending-discussion-card .discussion-avatar {
-  width: 34px;
-  height: 34px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  overflow: hidden;
-
-  border-radius: 50%;
-
-  background: #eeeeee;
-
-  color: #555555;
-
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.trending-discussion-card .discussion-user strong {
-  display: block;
-
-  margin-bottom: 2px;
-
-  color: var(--node-text);
-
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.trending-discussion-card .discussion-user span {
-  display: block;
-
-  color: #999999;
-
-  font-size: 10px;
-
-  text-transform: capitalize;
-}
-
-
-/* ---------------------------------------------------------
-   DISCUSSION CONTENT
---------------------------------------------------------- */
-
-.trending-discussion-card .discussion-content {
-  display: -webkit-box;
-
-  margin: 0 0 9px;
-
-  overflow: hidden;
-
-  color: var(--node-text);
-
-  font-size: 13px;
-  font-weight: 500;
-
-  line-height: 1.45;
-
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-
-/* ---------------------------------------------------------
-   DISCUSSION META
---------------------------------------------------------- */
-
-.trending-discussion-card .discussion-meta {
-  display: flex;
-  align-items: center;
-
-  gap: 4px;
-
-  margin: 0 0 9px;
-
-  padding: 0;
-
-  border: none;
-
-  color: #a0a0a0;
-
-  font-size: 11px;
-}
-
-
-/* ---------------------------------------------------------
-   DISCUSSION TAGS
---------------------------------------------------------- */
-
-.trending-discussion-card .discussion-tags {
-  display: flex;
-  flex-wrap: wrap;
-
-  gap: 6px;
-
-  margin: 0;
-}
-
-.trending-discussion-card .discussion-tags span {
-  display: inline-flex;
-  align-items: center;
-
-  padding: 4px 10px;
-
-  border-radius: 12px;
-
-  background: var(--node-red-soft);
-
-  color: var(--node-red);
-
-  font-size: 10px;
-  font-weight: 500;
-}
-
-
-/* =========================================================
-   TRENDING TOPICS
-========================================================= */
-
-.trending-topics {
-  min-width: 0;
-
-  padding: 16px 12px;
-
-  background: var(--node-white);
-
-  border-radius: 10px;
-}
-
-.trending-topics h2 {
-  margin: 0;
-
-  color: var(--node-text);
-
-  font-size: 16px;
-  font-weight: 500;
-
-  letter-spacing: -0.3px;
-}
-
-
-/* TOPICS */
-
-.topic-list {
-  display: flex;
-  flex-wrap: wrap;
-
-  gap: 5px;
-
-  margin-top: 12px;
-}
-
-.topic-tag {
-  display: inline-flex;
-  align-items: center;
-
-  padding: 5px 12px;
-
-  border-radius: 12px;
-
-  background: var(--node-red-soft);
-
-  color: var(--node-red);
-
-  font-size: 10px;
-  font-weight: 500;
-}
-
-.fixed-topic {
-  font-weight: 600;
-}
-
-.fixed-topics {
-  padding-bottom: 0;
-
-  border-bottom: none;
-}
-
-.dynamic-topics {
-  margin-top: 5px;
-}
-
-
-/* =========================================================
-   DIVIDER
-========================================================= */
-
-.feed-divider {
-  width: 100%;
-
-  height: 1px;
-
-  margin: 14px 0 16px;
-
-  background: #dcdcdc;
-}
-
-
-/* =========================================================
-   MAIN POST LIST
-========================================================= */
-
-.post-list {
-  width: 100%;
-
-  max-width: 100%;
-}
-
-.post-list-items {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 10px;
-}
-
-
-/* =========================================================
-   MAIN POST CARD
-========================================================= */
-
-.post-list article {
-  width: 100%;
-
-  padding: 18px 20px;
-
-  background: var(--node-white);
-
-  border: none;
-
-  border-radius: 9px;
-
-  box-shadow: none;
-}
-
-
-/* ---------------------------------------------------------
-   POST TEXT DEFAULTS
---------------------------------------------------------- */
-
-.post-list article p {
-  margin: 0 0 12px;
-
-  color: var(--node-text);
-
-  font-size: 14px;
-
-  line-height: 1.5;
-}
-
-.post-list article h3 {
-  margin: 0 0 8px;
-
-  color: var(--node-text);
-
-  font-size: 20px;
-  font-weight: 500;
-
-  letter-spacing: -0.6px;
-
-  line-height: 1.35;
-}
-
-
-/* ---------------------------------------------------------
-   POST IDENTITY
---------------------------------------------------------- */
-
-.post-list article > p:first-child {
-  margin-bottom: 12px;
-
-  color: var(--node-text);
-
-  font-size: 13px;
-  font-weight: 500;
-}
-
-
-/* ---------------------------------------------------------
-   POST CONTENT
---------------------------------------------------------- */
-
-.post-list article p {
-  color: #8e8e8e;
-}
-
-
-/* Caption */
-
-.post-list article h3 + p {
-  color: #9a9a9a;
-
-  font-size: 15px;
-}
-
-
-/* =========================================================
-   EMPTY STATE
-========================================================= */
-
-.empty-state {
-  color: var(--node-muted);
-
-  font-size: 13px;
-}
-
-.page-state {
-  min-height: 100vh;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex-direction: column;
-
-  background: var(--node-bg);
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width: 1200px) {
-
-  .sidebar {
-    width: 240px;
-  }
-
-  .brand {
-    min-width: 210px;
-  }
-
-  .feed-main {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-
-  .feed-top {
-    grid-template-columns:
-      minmax(0, 1fr)
-      190px;
-  }
-}
-
-
-@media (max-width: 1000px) {
-
-  .feed-top {
-    grid-template-columns: 1fr;
-  }
-
-  .trending-topics {
-    width: 100%;
-  }
-
-  .trending-discussion-list {
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
-  }
-}
-
-
-@media (max-width: 800px) {
-
-  .top-header {
-    height: 72px;
-
-    padding: 0 18px;
-  }
-
-  .feed-layout {
-    min-height: calc(100vh - 72px);
-  }
-
-  .brand {
-    min-width: auto;
-  }
-
-  .brand-name {
-    font-size: 21px;
-  }
-
-  .search-bar {
-    display: none;
-  }
-
-  .sidebar {
-    width: 190px;
-
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .feed-main {
-    padding:
-      18px
-      16px
-      40px;
-  }
-
-  .trending-discussion-list {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-}
-
-
-@media (max-width: 600px) {
-
-  .sidebar {
-    display: none;
-  }
-
-  .header-actions {
-    gap: 7px;
-  }
-
-  .notification-button {
-    width: 40px;
-    height: 40px;
-  }
-
-  .signup-button {
-    min-width: auto;
-
-    padding: 0 15px;
-  }
-
-  .feed-main {
-    padding:
-      16px
-      12px
-      32px;
-  }
-
-  .trending-discussion-list {
-    grid-template-columns: 1fr;
-  }
-
-  .trending-discussion-card {
-    min-height: auto;
-  }
-}
-
-/* =========================================================
-   HOME FEED POLISH
-========================================================= */
-
-.top-header {
-  height: 70px;
-  padding: 0 24px;
-}
-
-.brand {
-  min-width: 195px;
-  gap: 8px;
-}
-
-.brand-logo {
-  width: 34px;
-  height: 34px;
-}
-
-.brand-name {
-  font-size: 22px;
-}
-
-.search-bar {
-  max-width: 398px;
-  height: 40px;
-  border-radius: 7px;
-}
-
-.search-bar input {
-  font-size: 12px;
-}
-
-.header-actions {
-  gap: 14px;
-}
-
-.notification-button {
-  width: 38px;
-  height: 38px;
-}
-
-.signup-button {
-  min-width: 114px;
-  height: 36px;
-  font-size: 12px;
-}
-
-.feed-layout {
-  min-height: calc(100vh - 70px);
-}
-
-.sidebar {
-  width: 208px;
-  padding: 11px 17px 28px;
-}
-
-.ask-post-button {
-  height: 37px;
-  margin-bottom: 16px;
-  border-radius: 8px;
-  font-size: 12px;
-}
-
-.ask-post-icon {
   width: 17px;
   height: 17px;
 }
@@ -1122,26 +331,145 @@
   height: 17px;
 }
 
+/* Sidebar sections */
+
 .sidebar-section {
   margin-top: 14px;
 }
 
 .sidebar-label {
-  margin-bottom: 7px;
-  font-size: 10px;
+  margin: 0 0 7px;
+  color: #8d8d8d;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
+/*
+  Tombol toggle diposisikan tepat di atas garis pemisah.
+  Posisi absolute mencegah tombol mengubah lebar menu.
+*/
+
+.sidebar-heading {
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+  margin-bottom: 7px;
+}
+
+.sidebar-heading .sidebar-label {
+  margin: 0;
+}
+
+.sidebar-toggle-button {
+  position: absolute;
+  top: 64px;
+  right: -15px;
+  z-index: 5;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+  padding: 0;
+
+  color: var(--node-text);
+  background: var(--node-white);
+  border: 1px solid var(--node-border);
+  border-radius: 7px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: background 0.2s ease;
+}
+
+.sidebar-toggle-button:hover,
+.sidebar-reopen-button:hover {
+  background: var(--node-red-soft);
+}
+
+.sidebar-toggle-button svg,
+.sidebar-reopen-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Menu items */
+
 .sidebar-item {
-  height: 36px;
+  display: flex;
+  align-items: center;
   gap: 10px;
+
+  width: 100%;
+  height: 36px;
   padding: 0 12px;
+
+  color: #929292;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+
   font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-item.active {
+  color: var(--node-red);
+  background: var(--node-red-soft);
+  font-weight: 600;
+}
+
+.sidebar-item.disabled {
+  color: #b0b0b0;
+  cursor: default;
 }
 
 .sidebar-item svg {
+  flex: 0 0 17px;
   width: 17px;
   height: 17px;
 }
+
+/*
+  Saat sidebar tertutup, tombol pembuka berada di sisi kiri
+  layout. Padding konten ditambah agar tombol tidak menutupi feed.
+*/
+
+.sidebar-reopen-button {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+  padding: 0;
+
+  color: var(--node-text);
+  background: var(--node-white);
+  border: 1px solid var(--node-border);
+  border-radius: 7px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: background 0.2s ease;
+}
+
+.sidebar-collapsed .feed-main {
+  padding-left: 56px;
+}
+
+/* =========================================================
+   MAIN FEED GRID
+========================================================= */
 
 .feed-main {
   display: grid;
@@ -1151,122 +479,370 @@
     "divider ."
     "posts .";
   align-content: start;
+  align-items: start;
   column-gap: 12px;
+
+  flex: 1;
+  min-width: 0;
   padding: 12px 22px 48px;
 }
 
 .trending-discussions {
   grid-area: discussions;
-}
-
-.trending-topics {
-  grid-area: topics;
-  padding: 12px 10px;
-  border-radius: 9px;
-}
-
-.trending-discussions .section-heading {
-  margin-bottom: 6px;
-}
-
-.trending-discussions .section-heading h2 {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.45px;
-}
-
-.see-more-button {
-  color: var(--node-red);
-  font-size: 11px;
-}
-
-.trending-discussion-list {
-  gap: 8px;
-}
-
-.trending-discussion-card {
-  min-height: 130px;
-  padding: 11px 12px;
-  border-radius: 9px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.025);
-}
-
-.trending-discussion-card .discussion-user {
-  gap: 7px;
-  margin-bottom: 7px;
-}
-
-.trending-discussion-card .discussion-avatar {
-  width: 27px;
-  height: 27px;
-  font-size: 10px;
-}
-
-.trending-discussion-card .discussion-user strong {
-  font-size: 10px;
-}
-
-.trending-discussion-card .discussion-user span {
-  font-size: 9px;
-}
-
-.trending-discussion-card .discussion-content {
-  margin-bottom: 6px;
-  font-size: 10px;
-  line-height: 1.45;
-}
-
-.trending-discussion-card .discussion-meta {
-  gap: 4px;
-  margin: 0 0 6px;
-  font-size: 9px;
-}
-
-.trending-discussion-card .discussion-meta svg {
-  width: 13px;
-  height: 13px;
-}
-
-.trending-discussion-card .discussion-tags {
-  gap: 4px;
-}
-
-.trending-discussion-card .discussion-tags span,
-.topic-tag {
-  padding: 3px 9px;
-  font-size: 9px;
-}
-
-.trending-topics h2 {
-  font-size: 12px;
-  letter-spacing: -0.2px;
-}
-
-.topic-list {
-  gap: 4px;
-  margin-top: 8px;
-}
-
-.dynamic-topics {
-  margin-top: 4px;
+  min-width: 0;
 }
 
 .feed-divider {
   grid-area: divider;
+  width: 100%;
+  height: 1px;
   margin: 12px 0;
+
   background: var(--node-border-light);
 }
 
 .post-list {
   grid-area: posts;
+  width: 100%;
+  max-width: 100%;
 }
 
-.post-list-items {
+/* =========================================================
+   TRENDING DISCUSSIONS
+========================================================= */
+
+.trending-discussions {
+  min-width: 0;
+}
+
+.trending-discussions .section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin: 0 0 10px;
+}
+
+.trending-discussions .section-heading h2 {
+  margin: 0;
+  color: var(--node-text);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.45px;
+}
+
+/* Tombol See more */
+.see-more-button {
+  flex-shrink: 0;
+  padding: 5px 8px;
+  color: var(--node-red-dark);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.see-more-button:hover {
+  background: #f5e6e8;
+}
+
+/* Grid kartu */
+.trending-discussion-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  align-items: start;
+}
+
+/* Kartu diskusi */
+.trending-discussion-card {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  padding: 12px;
+  overflow-wrap: anywhere;
+
+  background: var(--node-white);
+  border: 1px solid var(--node-border-light);
+  border-radius: 9px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.025);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.trending-discussion-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.045);
+}
+
+/* Informasi pengguna */
+.trending-discussion-card .discussion-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin-bottom: 9px;
+}
+
+.trending-discussion-card .discussion-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+
+  color: #555;
+  background: #eee;
+  border-radius: 50%;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.trending-discussion-card .discussion-user > div:last-child {
+  min-width: 0;
+}
+
+.trending-discussion-card .discussion-user strong {
+  display: block;
+  overflow: hidden;
+  margin-bottom: 2px;
+  color: var(--node-text);
+  font-size: 10px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trending-discussion-card .discussion-user span {
+  display: block;
+  overflow: hidden;
+  color: var(--node-muted);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Isi diskusi */
+.trending-discussion-card .discussion-content {
+  display: -webkit-box;
+  margin: 0 0 9px;
+  overflow: hidden;
+
+  color: var(--node-text);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Hashtag */
+.trending-discussion-card .discussion-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 5px;
+  margin: 0 0 8px;
+}
+
+.trending-discussion-card .discussion-tags span {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 4px 8px;
+
+  color: var(--node-red-dark);
+  background: #f5e6e8;
+  border: 1px solid transparent;
+  border-radius: 999px;
+
+  font-size: 9px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+/* Ikon dan jumlah komentar */
+.trending-discussion-card .discussion-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  align-self: flex-start;
+
+  margin-top: 0;
+  padding-top: 4px;
+
+  color: var(--node-muted);
+  border: 0;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.trending-discussion-card .discussion-meta svg {
+  flex: 0 0 14px;
+  width: 14px;
+  height: 14px;
+}
+
+/* Kartu horizontal dan vertikal tidak dipaksa tinggi */
+.trending-discussion-card.discussion-card-horizontal,
+.trending-discussion-card.discussion-card-vertical {
+  min-height: 0;
+  height: auto;
+}
+
+/* =========================================================
+   TRENDING TOPICS
+========================================================= */
+
+.trending-topics {
+  grid-area: topics;
+  align-self: start;
+  min-width: 0;
+  width: 100%;
+  padding: 12px;
+  background: var(--node-white);
+  border: 1px solid var(--node-border-light);
+  border-radius: 9px;
+}
+
+.trending-topics-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
 }
 
-.post-list article.post-card {
+.trending-topics h2 {
+  margin: 0;
+  color: var(--node-text);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+/* Susunan tag topik */
+.topic-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.fixed-topics {
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--node-border-light);
+}
+
+.dynamic-topics {
+  margin-top: 9px;
+}
+
+/* Semua tag memiliki warna dan bentuk konsisten */
+.topic-tag {
+  appearance: none;
+  -webkit-appearance: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+
+  min-height: 25px;
+  max-width: 100%;
+  padding: 5px 10px;
+
+  color: var(--node-red-dark);
+  background: #f5e6e8;
+  border: 1px solid transparent;
+  border-radius: 999px;
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.topic-tag.fixed-topic {
+  color: var(--node-red-dark);
+  background: #f5e6e8;
+  font-weight: 600;
+}
+
+.topic-tag:hover {
+  color: var(--node-red-dark);
+  background: #efd6da;
+  border-color: #e7c4ca;
+}
+
+.topic-tag.topic-tag-active {
+  color: var(--node-red-dark);
+  background: #f5e6e8;
+  border-color: var(--node-red-dark);
+}
+
+/* Tombol Reset filter */
+.clear-topic-button {
+  flex-shrink: 0;
+  padding: 4px 7px;
+
+  color: var(--node-red-dark);
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.clear-topic-button:hover {
+  background: #f5e6e8;
+}
+
+.active-topic-filter {
+  margin-bottom: 10px;
+  color: var(--node-muted);
+  font-size: 12px;
+}
+
+/* =========================================================
+   POSTS
+========================================================= */
+
+.post-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.post-list article {
+  width: 100%;
   padding: 12px 14px;
+  background: var(--node-white);
+  border: none;
+  border-radius: 9px;
+  box-shadow: none;
+}
+
+.post-list article.post-card {
   border: 1px solid rgba(232, 232, 232, 0.45);
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.018);
@@ -1278,32 +854,81 @@
   box-shadow: 0 5px 16px rgba(40, 20, 20, 0.045);
 }
 
+.post-list article p {
+  margin: 0 0 12px;
+  color: #8e8e8e;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.post-list article > p:first-child {
+  margin-bottom: 12px;
+  color: var(--node-text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.post-list article h3 {
+  margin: 0 0 8px;
+  color: var(--node-text);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.6px;
+  line-height: 1.35;
+}
+
+.post-list article h3.post-caption {
+  margin: 0 0 5px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.45px;
+  line-height: 1.35;
+}
+
+.post-list article p.post-content {
+  margin: 0 0 10px;
+  color: #858585;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.post-list article h3 + p {
+  color: #9a9a9a;
+  font-size: 15px;
+}
+
+/* Post author */
+
 .post-author {
   display: flex;
   align-items: center;
-  min-width: 0;
   gap: 8px;
+  min-width: 0;
   margin-bottom: 9px;
 }
 
 .post-avatar {
   display: grid;
+  flex: 0 0 27px;
+  place-items: center;
+
   width: 27px;
   height: 27px;
-  flex: 0 0 auto;
-  place-items: center;
-  border-radius: 50%;
-  background: #eee;
+
   color: #555;
+  background: #eee;
+  border-radius: 50%;
+
   font-size: 10px;
   font-weight: 600;
 }
 
 .post-author-info {
   display: flex;
-  min-width: 0;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
 }
 
 .post-author-info strong {
@@ -1325,9 +950,11 @@
   overflow: hidden;
   margin-left: 2px;
   padding: 3px 10px;
-  border-radius: 999px;
-  background: var(--node-green);
+
   color: var(--node-green-text);
+  background: var(--node-green);
+  border-radius: 999px;
+
   font-size: 9px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1342,34 +969,20 @@
 .post-owner-actions button,
 .comment-actions button {
   padding: 3px 6px;
+  color: var(--node-muted);
+  background: transparent;
   border: 0;
   border-radius: 5px;
-  background: transparent;
-  color: var(--node-muted);
   font-size: 10px;
 }
 
 .post-owner-actions button:hover,
 .comment-actions button:hover {
-  background: var(--node-red-soft);
   color: var(--node-red);
+  background: var(--node-red-soft);
 }
 
-.post-list article h3.post-caption {
-  margin: 0 0 5px;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.45px;
-  line-height: 1.35;
-}
-
-.post-list article p.post-content {
-  margin: 0 0 10px;
-  color: #858585;
-  font-size: 12px;
-  line-height: 1.55;
-  white-space: pre-wrap;
-}
+/* Post tags and media */
 
 .post-tags {
   display: flex;
@@ -1380,9 +993,9 @@
 
 .post-tags span {
   padding: 3px 10px;
-  border-radius: 999px;
-  background: var(--node-red-soft);
   color: var(--node-red);
+  background: var(--node-red-soft);
+  border-radius: 999px;
   font-size: 9px;
   font-weight: 500;
 }
@@ -1399,10 +1012,13 @@
   width: 100%;
   max-width: 520px;
   max-height: 420px;
-  border-radius: 8px;
   object-fit: contain;
+
   background: #f7f7f7;
+  border-radius: 8px;
 }
+
+/* Post actions */
 
 .post-actions {
   display: flex;
@@ -1416,9 +1032,11 @@
   align-items: center;
   gap: 5px;
   padding: 2px 0;
-  border: 0;
-  background: transparent;
+
   color: #999;
+  background: transparent;
+  border: 0;
+
   font-size: 11px;
 }
 
@@ -1438,6 +1056,8 @@
   font-size: 11px !important;
 }
 
+/* Post editing and comments */
+
 .post-edit-form,
 .comment-form {
   display: grid;
@@ -1449,11 +1069,13 @@
 .comment-form textarea,
 .comment-item textarea {
   width: 100%;
-  resize: vertical;
   padding: 9px 10px;
+  resize: vertical;
+
+  color: var(--node-text);
   border: 1px solid var(--node-border);
   border-radius: 7px;
-  color: var(--node-text);
+
   font-size: 12px;
 }
 
@@ -1462,17 +1084,19 @@
 .comment-item form button {
   justify-self: start;
   padding: 7px 11px;
+
+  color: #ffffff;
+  background: var(--node-red);
   border: 0;
   border-radius: 6px;
-  background: var(--node-red);
-  color: white;
+
   font-size: 11px;
 }
 
 .post-edit-form button + button,
 .comment-item form button + button {
-  background: #f1f1f1;
   color: var(--node-secondary);
+  background: #f1f1f1;
 }
 
 .comments-panel {
@@ -1511,6 +1135,26 @@
   margin-top: 10px;
 }
 
+/* =========================================================
+   RESPONSIVE: TABLET
+========================================================= */
+
+@media (max-width: 1200px) {
+  .sidebar {
+    flex-basis: 190px;
+    width: 190px;
+  }
+
+  .brand {
+    min-width: 170px;
+  }
+
+  .feed-main {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+}
+
 @media (max-width: 1000px) {
   .feed-main {
     grid-template-columns: minmax(0, 1fr);
@@ -1529,6 +1173,10 @@
   .feed-divider {
     margin: 2px 0;
   }
+
+  .trending-discussion-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 800px) {
@@ -1537,22 +1185,43 @@
     padding: 0 16px;
   }
 
-  .brand {
-    min-width: 0;
-  }
-
   .feed-layout {
     min-height: calc(100vh - 64px);
   }
 
+  .brand {
+    min-width: 0;
+  }
+
+  .brand-name {
+    font-size: 21px;
+  }
+
+  .search-bar {
+    display: none;
+  }
+
   .sidebar {
+    flex-basis: 178px;
     width: 178px;
   }
 
   .feed-main {
     padding: 14px 14px 32px;
   }
+
+  .sidebar-collapsed .feed-main {
+    padding-left: 56px;
+  }
+
+  .trending-discussion-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
+
+/* =========================================================
+   RESPONSIVE: MOBILE
+========================================================= */
 
 @media (max-width: 600px) {
   .top-header {
@@ -1569,20 +1238,57 @@
     font-size: 20px;
   }
 
+  .header-actions {
+    gap: 7px;
+  }
+
   .notification-button {
     display: none;
   }
 
   .signup-button {
+    min-width: auto;
     height: 34px;
+    padding: 0 15px;
   }
 
   .feed-layout {
     min-height: calc(100vh - 60px);
   }
 
+  /*
+    Pada layar kecil, sidebar menjadi panel overlay.
+    Jadi sidebar tetap bisa dibuka kembali melalui toggle.
+  */
+
+  .sidebar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 90;
+
+    width: min(230px, 82vw);
+    padding: 11px 17px 28px;
+
+    background: var(--node-white);
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .sidebar-hidden {
+    display: none !important;
+  }
+
+  .sidebar-toggle-button {
+    right: -15px;
+  }
+
   .feed-main {
     padding: 12px 10px 24px;
+  }
+
+  .sidebar-collapsed .feed-main {
+    padding-left: 52px;
   }
 
   .trending-discussion-list {

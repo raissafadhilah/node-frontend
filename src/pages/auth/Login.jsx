@@ -1,10 +1,12 @@
 import { useState } from 'react';
-
 import { Link, useNavigate } from 'react-router-dom';
-
 import { loginUser } from '../../services/api';
-
 import './Login.css';
+import {
+  USE_MOCK_AUTH,
+  setMockUser,
+  findMockAccount,
+} from '../../data/mockAuth';
 
 function Login() {
   const navigate = useNavigate();
@@ -30,34 +32,91 @@ function Login() {
     setError('');
     setSuccess('');
   }
+  // DIBAWAH INI KETIKA PAKE API/DATABASE
+  // async function handleSubmit(event) {
+  //   event.preventDefault();
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  //   setError('');
+  //   setSuccess('');
+  //   setLoading(true);
 
-    setError('');
-    setSuccess('');
-    setLoading(true);
+  //   try {
+  //     const result = await loginUser(form);
 
-    try {
-      const result = await loginUser(form);
+  //     if (result.success) {
+  //       setSuccess(result.message || 'Login berhasil.');
 
-      if (result.success) {
-        setSuccess(result.message || 'Login berhasil.');
+  //       setTimeout(() => {
+  //         navigate('/');
+  //       }, 500);
+  //     } else {
+  //       setError(result.message || 'Login gagal.');
+  //     }
+  //   } catch (err) {
+  //     setError(
+  //       err.message || 'Terjadi kesalahan saat login.'
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+  
+async function handleSubmit(event) {
+  event.preventDefault();
 
-        setTimeout(() => {
-          navigate('/');
-        }, 500);
-      } else {
-        setError(result.message || 'Login gagal.');
-      }
-    } catch (err) {
-      setError(
-        err.message || 'Terjadi kesalahan saat login.'
-      );
-    } finally {
-      setLoading(false);
+  setError('');
+  setSuccess('');
+  setLoading(true);
+
+  try {
+    if (USE_MOCK_AUTH) {
+      const email = form.email.trim().toLowerCase();
+
+      // Cari akun dummy yang sebelumnya didaftarkan.
+      const account = findMockAccount(email);
+
+      // Jika belum terdaftar, buat profil dummy
+      // berdasarkan email untuk pengujian frontend.
+      const user = account || {
+        id: 'mock-user',
+        full_name: email.split('@')[0],
+        nickname: email.split('@')[0],
+        email,
+        status: 'mahasiswa',
+        profile_photo: null,
+      };
+
+      setMockUser(user);
+
+      setSuccess('Login dummy berhasil.');
+
+      setTimeout(() => {
+        navigate('/');
+      }, 500);
+
+      return;
     }
+
+    // Digunakan kembali saat backend sudah siap.
+    const result = await loginUser(form);
+
+    if (result.success) {
+      setSuccess(result.message || 'Login berhasil.');
+
+      setTimeout(() => {
+        navigate('/');
+      }, 500);
+    } else {
+      setError(result.message || 'Login gagal.');
+    }
+  } catch (err) {
+    setError(
+      err.message || 'Terjadi kesalahan saat login.'
+    );
+  } finally {
+    setLoading(false);
   }
+}
 
   return (
     <main className="auth-page">

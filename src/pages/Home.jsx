@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { mockHome } from '../data/homeMockData'; // Data Dummy untuk Frond End - Jeff
-
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { mockHome } from '../data/homeMockData';
+import { getMockUser } from '../data/mockAuth';
 
 import {
   getHome,
@@ -13,10 +13,15 @@ import TrendingDiscussions from '../components/home/TrendingDiscussions';
 import PostList from '../components/home/PostList';
 
 function Home() {
+  const navigate = useNavigate();
   const [home, setHome] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(
+  () => getMockUser()
+  );
   const [error, setError] = useState('');
-
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [selectedTopic, setSelectedTopic] = useState('');
+  
   useEffect(() => {
     async function loadHome() {
       try {
@@ -28,27 +33,26 @@ function Home() {
         if (homeResult.success) {
           setHome(homeResult.data);
         } else {
-          setError(homeResult.message);
-          return;
+          setHome(mockHome);
+          setError('');
         }
 
         if (userResult.success) {
-          setCurrentUser(userResult.data);
-        } else {
-          setCurrentUser(null);
-        }
-      // } catch (err) {
-      //   setError(err.message);   --SEBELUMNYA DINAUNGI RAISSA
-      // } 
-        } catch (err) {
-          console.warn(
-            'Backend belum tersedia. Menggunakan data dummy untuk frontend.',
-            err
-          );
-
-  setHome(mockHome);
-  setCurrentUser(null);
+  setCurrentUser(userResult.data);
+} else {
+  setCurrentUser(getMockUser());
 }
+
+      } catch (err) {
+        console.warn(
+          'Backend belum tersedia. Menggunakan data dummy untuk frontend.',
+          err
+        );
+
+        setHome(mockHome);
+setCurrentUser(getMockUser());
+setError('');
+      }
     }
 
     loadHome();
@@ -56,9 +60,7 @@ function Home() {
 
   function handlePostDeleted(postId) {
     setHome((currentHome) => {
-      if (!currentHome) {
-        return currentHome;
-      }
+      if (!currentHome) return currentHome;
 
       return {
         ...currentHome,
@@ -69,23 +71,15 @@ function Home() {
     });
   }
 
-  function handlePostUpdated(
-    postId,
-    updatedContent
-  ) {
+  function handlePostUpdated(postId, updatedContent) {
     setHome((currentHome) => {
-      if (!currentHome) {
-        return currentHome;
-      }
+      if (!currentHome) return currentHome;
 
       return {
         ...currentHome,
         posts: currentHome.posts.map((post) =>
           post.id === postId
-            ? {
-                ...post,
-                content: updatedContent,
-              }
+            ? { ...post, content: updatedContent }
             : post
         ),
       };
@@ -112,20 +106,13 @@ function Home() {
 
   return (
     <div className="feed-page">
-
-      {/* HEADER */}
       <header className="top-header">
-
         <div className="brand">
           <img
-            src="/node-logo.png"
+            src="/NodeLogo.png"
             alt="Node logo"
             className="brand-logo"
           />
-
-          <span className="brand-name">
-            node
-          </span>
         </div>
 
         <div className="search-bar">
@@ -144,7 +131,6 @@ function Home() {
                 stroke="currentColor"
                 strokeWidth="1.8"
               />
-
               <path
                 d="M16 16L21 21"
                 stroke="currentColor"
@@ -161,41 +147,36 @@ function Home() {
         </div>
 
         <div className="header-actions">
-
-        <button
-          type="button"
-          className="notification-button"
-          aria-label="Notifications"
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+          <button
+            type="button"
+            className="notification-button"
+            aria-label="Notifications"
           >
-            <path
-              d="M18 8C18 5.79086 16.2091 4 14 4H10C7.79086 4 6 5.79086 6 8V12.5C6 13.5 5.6 14.4 5 15.2L4 16.5H20L19 15.2C18.4 14.4 18 13.5 18 12.5V8Z"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-
-            <path
-              d="M10 19C10.5 20 11.2 20.5 12 20.5C12.8 20.5 13.5 20 14 19"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
-
-        {currentUser ? (
-            <Link
-              to="/profile"
-              className="header-user"
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
+              <path
+                d="M18 8C18 5.79086 16.2091 4 14 4H10C7.79086 4 6 5.79086 6 8V12.5C6 13.5 5.6 14.4 5 15.2L4 16.5H20L19 15.2C18.4 14.4 18 13.5 18 12.5V8Z"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M10 19C10.5 20 11.2 20.5 12 20.5C12.8 20.5 13.5 20 14 19"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+
+          {currentUser ? (
+            <Link to="/profile" className="header-user">
               <div className="header-user-avatar">
                 {currentUser.profile_photo ? (
                   <img
@@ -215,37 +196,25 @@ function Home() {
               </div>
 
               <span className="header-user-name">
-                {currentUser.full_name}
-              </span>
+  {currentUser.nickname || currentUser.full_name}
+</span>
             </Link>
           ) : (
-          <Link
-            to="/login"
-            className="signup-button"
-          >
-            Sign up
-          </Link>
-        )}
-
-      </div>
+            <Link to="/login" className="signup-button">
+              Sign up
+            </Link>
+          )}
+        </div>
       </header>
 
-      <div className="feed-layout">
-
-        <aside className="sidebar">
-
-          <Link
-            to="/create-post"
-            className="ask-post-button"
-          >
-            <span
-              className="ask-post-icon"
-              aria-hidden="true"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-              >
+      <div className={`feed-layout ${sidebarOpen ? '' : 'sidebar-collapsed'}`}> 
+        {/* Ini memberi CSS penanda saat sidebar ditutup, sehingga ruang untuk tombol dapat disediakan tanpa menindih konten.  */}
+        <aside
+          className={`sidebar ${sidebarOpen ? '' : 'sidebar-hidden'}`}
+        >
+          <Link to="/create-post" className="ask-post-button">
+            <span className="ask-post-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
                 <rect
                   x="4"
                   y="4"
@@ -255,7 +224,6 @@ function Home() {
                   stroke="currentColor"
                   strokeWidth="1.7"
                 />
-
                 <path
                   d="M12 8v8M8 12h8"
                   stroke="currentColor"
@@ -264,41 +232,52 @@ function Home() {
                 />
               </svg>
             </span>
-
             <span>Ask / Post</span>
           </Link>
 
           <div className="sidebar-section">
+            <div className="sidebar-heading">
+              <p className="sidebar-label">MAIN MENU</p>
 
-            <p className="sidebar-label">
-              MAIN MENU
-            </p>
-
-            <button
-              type="button"
-              className="sidebar-item active"
-              aria-current="page"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
+              <button
+                type="button"
+                className="sidebar-toggle-button"
+                onClick={() => setSidebarOpen(false)}
+                aria-label="Sembunyikan sidebar"
+                title="Sembunyikan sidebar"
               >
-                <path
-                  d="m3.5 10 8.5-7 8.5 7v9a1.5 1.5 0 0 1-1.5 1.5h-14A1.5 1.5 0 0 1 3.5 19v-9Z"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                  strokeLinejoin="round"
-                />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="16"
+                    rx="2"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                  />
+                  <path
+                    d="M9 4v16"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                  />
+                </svg>
+              </button>
+            </div>
 
+            <button type="button" className="sidebar-item active">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
-                  d="M9 20.5v-7h6v7"
+                  d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1V10Z"
                   stroke="currentColor"
                   strokeWidth="1.7"
                   strokeLinejoin="round"
                 />
               </svg>
-
               <span>Home</span>
             </button>
 
@@ -307,11 +286,7 @@ function Home() {
               className="sidebar-item disabled"
               disabled
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <circle
                   cx="11"
                   cy="11"
@@ -319,7 +294,6 @@ function Home() {
                   stroke="currentColor"
                   strokeWidth="1.8"
                 />
-
                 <path
                   d="M16 16L21 21"
                   stroke="currentColor"
@@ -327,34 +301,24 @@ function Home() {
                   strokeLinecap="round"
                 />
               </svg>
-
               <span>Explore</span>
             </button>
-
           </div>
 
           <div className="sidebar-section">
-
-            <p className="sidebar-label">
-              SETTINGS
-            </p>
+            <p className="sidebar-label">SETTINGS</p>
 
             <button
               type="button"
               className="sidebar-item disabled"
               disabled
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                   d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"
                   stroke="currentColor"
                   strokeWidth="1.7"
                 />
-
                 <path
                   d="m19.4 15 .1.1a1.8 1.8 0 1 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3 .9v.2a1.8 1.8 0 1 1-3.6 0v-.2a1.8 1.8 0 0 0-3-.9l-.1.1a1.8 1.8 0 1 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-.9-3h-.2a1.8 1.8 0 1 1 0-3.6h.2a1.8 1.8 0 0 0 .9-3l-.1-.1a1.8 1.8 0 1 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3-.9v-.2a1.8 1.8 0 1 1 3.6 0v.2a1.8 1.8 0 0 0 3 .9l.1-.1a1.8 1.8 0 1 1 2.5 2.5l-.1.1a1.8 1.8 0 0 0 .9 3h.2a1.8 1.8 0 1 1 0 3.6h-.2a1.8 1.8 0 0 0-.9 3Z"
                   stroke="currentColor"
@@ -362,39 +326,64 @@ function Home() {
                   strokeLinejoin="round"
                 />
               </svg>
-
               <span>Settings</span>
             </button>
-
           </div>
-
         </aside>
 
-        <main className="feed-main">
+        {!sidebarOpen && (
+          <button
+            type="button"
+            className="sidebar-reopen-button"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Tampilkan sidebar"
+            title="Tampilkan sidebar"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <rect
+                x="3"
+                y="4"
+                width="18"
+                height="16"
+                rx="2"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+              <path
+                d="M9 4v16"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+            </svg>
+          </button>
+        )}
 
-          <TrendingDiscussions
-            discussions={home.trending_discussions}
+        <main className="feed-main">
+       <TrendingDiscussions
+            discussions={home?.trending_discussions || []}
+            selectedTopic={selectedTopic}
           />
 
           <TrendingTopics
-            topics={home.trending_topics}
-          />
-
-          <div
-            className="feed-divider"
-            aria-hidden="true"
+            topics={home?.trending_topics || []}
+            selectedTopic={selectedTopic}
+            onTopicClick={setSelectedTopic}
           />
 
           <PostList
             posts={home.posts}
+            currentUser={currentUser}
+            onRequireLogin={() => navigate('/login')}
             onPostDeleted={handlePostDeleted}
             onPostUpdated={handlePostUpdated}
           />
-
+          
         </main>
-
       </div>
-
     </div>
   );
 }

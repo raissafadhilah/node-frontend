@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import { registerUser } from '../../services/api';
-
 import './Register.css';
+import {
+  USE_MOCK_AUTH,
+  saveMockAccount,
+} from '../../data/mockAuth';
 
 function Register() {
   const navigate = useNavigate();
@@ -38,6 +40,38 @@ function Register() {
     setError('');
     setSuccess('');
     setLoading(true);
+
+    if (USE_MOCK_AUTH) {
+  if (form.password !== form.confirmPassword) {
+    setError('Password dan konfirmasi password tidak sama.');
+    setLoading(false);
+    return;
+  }
+
+  const email = form.email.trim().toLowerCase();
+
+  const mockAccount = {
+    id: `mock-${Date.now()}`,
+    full_name: form.fullName.trim(),
+    nickname: form.fullName.trim().split(/\s+/)[0],
+    email,
+    status: form.status,
+    profile_photo: null,
+  };
+
+  saveMockAccount(mockAccount);
+
+  setSuccess(
+    'Pendaftaran dummy berhasil. Silakan login.'
+  );
+
+  setTimeout(() => {
+    navigate('/login');
+  }, 700);
+
+  setLoading(false);
+  return;
+}
 
     try {
       const result = await registerUser(form);

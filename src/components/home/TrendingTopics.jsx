@@ -1,44 +1,60 @@
-function TrendingTopics({ topics }) {
-  const fixedTopics = [
-    'FICT',
-    'FHS',
-    'FMB',
-  ];
+function TrendingTopics({
+  topics = [],
+  selectedTopic = '',
+  onTopicClick = () => {},
+}) {
+  const fixedTopics = ['FICT', 'FHS', 'FMB'];
+
+  const dynamicTopics = topics.filter(
+    (topic) =>
+      !fixedTopics.includes(
+        String(topic.name).replace(/^#/, '').toUpperCase()
+      )
+  );
+
+  const renderTopic = (name, fixed = false) => {
+    const normalizedName = String(name).replace(/^#/, '');
+    const isActive =
+      selectedTopic.toLowerCase() === normalizedName.toLowerCase();
+
+    return (
+      <button
+        key={normalizedName}
+        type="button"
+        className={`topic-tag ${fixed ? 'fixed-topic' : ''} ${
+          isActive ? 'topic-tag-active' : ''
+        }`}
+        aria-pressed={isActive}
+        onClick={() => onTopicClick(isActive ? '' : normalizedName)}
+      >
+        #{normalizedName}
+      </button>
+    );
+  };
 
   return (
     <aside className="trending-topics">
-      <h2>Trending Topics</h2>
+      <div className="trending-topics-heading">
+        <h2>Trending Topics</h2>
 
-      {/* TOPIC FAKULTAS WAJIB */}
-      <div className="topic-list fixed-topics">
-        {fixedTopics.map((topic) => (
-          <span
-            key={topic}
-            className="topic-tag fixed-topic"
+        {selectedTopic && (
+          <button
+            type="button"
+            className="clear-topic-button"
+            onClick={() => onTopicClick('')}
           >
-            #{topic}
-          </span>
-        ))}
+            Reset
+          </button>
+        )}
       </div>
 
-      {/* TOPIC DINAMIS / TRENDING */}
-      {topics.length > 0 && (
+      <div className="topic-list fixed-topics">
+        {fixedTopics.map((topic) => renderTopic(topic, true))}
+      </div>
+
+      {dynamicTopics.length > 0 && (
         <div className="topic-list dynamic-topics">
-          {topics
-            .filter(
-              (topic) =>
-                !fixedTopics.includes(
-                  topic.name.toUpperCase()
-                )
-            )
-            .map((topic) => (
-              <span
-                key={`${topic.type}-${topic.name}`}
-                className="topic-tag"
-              >
-                #{topic.name}
-              </span>
-            ))}
+          {dynamicTopics.map((topic) => renderTopic(topic.name))}
         </div>
       )}
     </aside>

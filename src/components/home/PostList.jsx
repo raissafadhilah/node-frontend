@@ -2,6 +2,8 @@ import PostCard from './PostCard';
 
 function PostList({
   posts,
+  currentUser,
+  onRequireLogin,
   onPostDeleted,
   onPostUpdated,
 }) {
@@ -17,6 +19,8 @@ function PostList({
             <PostCard
               key={post.id}
               post={post}
+              currentUser={currentUser}
+              onRequireLogin={onRequireLogin}
               onPostDeleted={onPostDeleted}
               onPostUpdated={onPostUpdated}
             />

@@ -44,6 +44,8 @@ function formatRelativeTime(value) {
 
 function PostCard({
   post,
+  currentUser,
+  onRequireLogin,
   onPostDeleted,
   onPostUpdated,
 }) {
@@ -208,6 +210,11 @@ function PostCard({
     }
   }
   async function handleReaction() {
+    if (!currentUser) {
+      onRequireLogin();
+      return;
+    }
+
     if (isLoading) {
       return;
     }
@@ -234,6 +241,10 @@ function PostCard({
     }
   }
   async function handleBookmark() {
+    if (!currentUser) {
+  onRequireLogin();
+  return;
+}
     if (isBookmarkLoading) {
       return;
     }
@@ -258,6 +269,10 @@ function PostCard({
   async function handleCreateComment(event) {
     event.preventDefault();
 
+    if (!currentUser) {
+  onRequireLogin();
+  return;
+}
     if (isCommentLoading) {
       return;
     }

@@ -1,23 +1,43 @@
+
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { logoutUser } from '../../services/api';
+import {
+  USE_MOCK_AUTH,
+  clearMockUser,
+} from '../../data/mockAuth';
 
 function Logout() {
+  const navigate = useNavigate();
+
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   async function handleLogout() {
     setError('');
-    setSuccess('');
     setLoading(true);
 
     try {
+      if (USE_MOCK_AUTH) {
+        // Hapus status login dummy dari browser.
+        clearMockUser();
+
+        // Kembali ke Home sebagai pengunjung.
+        navigate('/', { replace: true });
+        return;
+      }
+
+      // Logout API untuk digunakan ketika backend siap.
       const result = await logoutUser();
 
-      setSuccess(result.message);
+      if (result.success) {
+        navigate('/', { replace: true });
+      } else {
+        setError(result.message || 'Logout gagal.');
+      }
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Terjadi kesalahan saat logout.');
     } finally {
       setLoading(false);
     }
@@ -34,17 +54,7 @@ function Logout() {
         {loading ? 'Logout...' : 'Logout'}
       </button>
 
-      {error && (
-        <p>
-          {error}
-        </p>
-      )}
-
-      {success && (
-        <p>
-          {success}
-        </p>
-      )}
+      {error && <p>{error}</p>}
     </div>
   );
 }
