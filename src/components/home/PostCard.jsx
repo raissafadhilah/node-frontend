@@ -1,5 +1,5 @@
-
 import { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   toggleReaction,
@@ -386,27 +386,30 @@ function PostCard({
           <strong>{post.full_name || 'Anonim'}</strong>
           <span>{formatRelativeTime(post.created_at)}</span>
         </div>
-        <span className="post-status">{post.status}</span>
-        <div className="post-owner-actions">
-          {!isEditingPost && post.can_edit && (
-            <button
-              type="button"
-              onClick={handleStartEditPost}
-              disabled={isPostDeleteLoading}
-            >
-              Edit
-            </button>
-          )}
-          {!isEditingPost && post.can_delete && (
-            <button
-              type="button"
-              onClick={handleDeletePost}
-              disabled={isPostDeleteLoading}
-            >
-              {isPostDeleteLoading ? 'Menghapus...' : 'Hapus'}
-            </button>
-          )}
-        </div>
+
+        <div className="post-status-group">
+  <span className="post-status">{post.status}</span>
+
+  {post.hashtags?.length > 0 && (
+    <div className="post-tags">
+      {post.hashtags.map((hashtag, index) => {
+        const normalizedTag = String(hashtag)
+          .replace(/^#/, '')
+          .trim();
+
+        return (
+          <Link
+            key={`${normalizedTag}-${index}`}
+            to={`/tag/${encodeURIComponent(normalizedTag)}`}
+            className="post-tag-link"
+          >
+            #{normalizedTag}
+          </Link>
+        );
+      })}
+    </div>
+  )}
+</div>
       </header>
 
       {post.caption && (

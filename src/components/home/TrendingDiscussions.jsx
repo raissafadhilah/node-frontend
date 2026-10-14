@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function TrendingDiscussions({
   discussions = [],
@@ -6,18 +7,22 @@ function TrendingDiscussions({
 }) {
   const [showMore, setShowMore] = useState(false);
 
+  const normalizedSelectedTopic = selectedTopic
+    .replace(/^#/, '')
+    .trim()
+    .toLowerCase();
+
   const filteredDiscussions = selectedTopic
     ? discussions.filter((post) => {
         const tags = [
           ...(post.hashtags || []),
           post.topic || '',
           post.topic_name || '',
-        ]
-          .map((tag) =>
-            String(tag).replace(/^#/, '').trim().toLowerCase()
-          );
+        ].map((tag) =>
+          String(tag).replace(/^#/, '').trim().toLowerCase()
+        );
 
-        return tags.includes(selectedTopic.replace(/^#/, '').trim().toLowerCase());
+        return tags.includes(normalizedSelectedTopic);
       })
     : discussions;
 
@@ -88,18 +93,7 @@ function TrendingDiscussions({
 
                 <p className="discussion-content">{post.content}</p>
 
-                {post.hashtags?.length > 0 && (
-                  <div className="discussion-tags">
-                    {post.hashtags.map((hashtag, tagIndex) => (
-                      <span key={`${hashtag}-${tagIndex}`}>
-                        {String(hashtag).startsWith('#')
-                          ? hashtag
-                          : `#${hashtag}`}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
+                {/* Jumlah balasan berada di atas tag */}
                 <div className="discussion-meta">
                   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path
@@ -111,6 +105,27 @@ function TrendingDiscussions({
                   </svg>
                   {post.comment_count ?? 0} balasan
                 </div>
+
+                {/* Tag kategori berada di bagian paling bawah */}
+                {post.hashtags?.length > 0 && (
+                  <div className="discussion-tags">
+                    {post.hashtags.map((hashtag, tagIndex) => {
+                      const normalizedTag = String(hashtag)
+                        .replace(/^#/, '')
+                        .trim();
+
+                      return (
+                        <Link
+                          key={`${normalizedTag}-${tagIndex}`}
+                          to={`/tag/${encodeURIComponent(normalizedTag)}`}
+                          className="discussion-tag-link"
+                        >
+                          #{normalizedTag}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
               </article>
             );
           })

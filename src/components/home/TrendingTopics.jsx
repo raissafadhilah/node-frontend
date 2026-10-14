@@ -1,36 +1,30 @@
+
+import { Link } from 'react-router-dom';
+
 function TrendingTopics({
   topics = [],
   selectedTopic = '',
-  onTopicClick = () => {},
 }) {
   const fixedTopics = ['FICT', 'FHS', 'FMB'];
 
-  const dynamicTopics = topics.filter(
-    (topic) =>
-      !fixedTopics.includes(
-        String(topic.name).replace(/^#/, '').toUpperCase()
-      )
+  // Gabungkan tag fakultas dan tag dinamis dalam satu daftar.
+  // Tag yang sama tidak ditampilkan dua kali.
+  const allTopics = [
+    ...fixedTopics,
+    ...topics.map((topic) =>
+      String(topic.name).replace(/^#/, '').trim()
+    ),
+  ].filter(Boolean).filter(
+    (topic, index, list) =>
+      list.findIndex(
+        (item) => item.toLowerCase() === topic.toLowerCase()
+      ) === index
   );
 
-  const renderTopic = (name, fixed = false) => {
-    const normalizedName = String(name).replace(/^#/, '');
-    const isActive =
-      selectedTopic.toLowerCase() === normalizedName.toLowerCase();
-
-    return (
-      <button
-        key={normalizedName}
-        type="button"
-        className={`topic-tag ${fixed ? 'fixed-topic' : ''} ${
-          isActive ? 'topic-tag-active' : ''
-        }`}
-        aria-pressed={isActive}
-        onClick={() => onTopicClick(isActive ? '' : normalizedName)}
-      >
-        #{normalizedName}
-      </button>
-    );
-  };
+  const normalizedSelectedTopic = selectedTopic
+    .replace(/^#/, '')
+    .trim()
+    .toLowerCase();
 
   return (
     <aside className="trending-topics">
@@ -38,27 +32,40 @@ function TrendingTopics({
         <h2>Trending Topics</h2>
 
         {selectedTopic && (
-          <button
-            type="button"
-            className="clear-topic-button"
-            onClick={() => onTopicClick('')}
-          >
+          <Link to="/" className="clear-topic-button">
             Reset
-          </button>
+          </Link>
         )}
       </div>
 
-      <div className="topic-list fixed-topics">
-        {fixedTopics.map((topic) => renderTopic(topic, true))}
-      </div>
+      <div className="topic-list">
+        {allTopics.map((topic) => {
+          const normalizedName = topic.trim();
+          const isActive =
+            normalizedSelectedTopic ===
+            normalizedName.toLowerCase();
 
-      {dynamicTopics.length > 0 && (
-        <div className="topic-list dynamic-topics">
-          {dynamicTopics.map((topic) => renderTopic(topic.name))}
-        </div>
-      )}
+          return (
+            <Link
+              key={normalizedName.toLowerCase()}
+              to={`/tag/${encodeURIComponent(normalizedName)}`}
+              className={`topic-tag ${
+                isActive ? 'topic-tag-active' : ''
+              }`}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              #{normalizedName}
+            </Link>
+          );
+        })}
+      </div>
     </aside>
   );
 }
 
 export default TrendingTopics;
+
+// fixed-topics dan dynamic-topics tidak lagi menjadi dua container terpisah.
+// Tag fakultas tetap muncul, lalu tag lain menyusul dalam daftar yang sama.
+// Tag yang sama tidak ditampilkan dua kali.
+// Semua tag tetap menggunakan class .topic-tag dan tetap dapat diklik.

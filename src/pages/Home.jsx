@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { mockHome } from '../data/homeMockData';
 import { getMockUser } from '../data/mockAuth';
 
@@ -20,7 +20,11 @@ function Home() {
   );
   const [error, setError] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [selectedTopic, setSelectedTopic] = useState('');
+  const { tagName } = useParams();
+
+  const selectedTopic = tagName
+    ? tagName.replace(/^#/, '')
+    : '';
   
   useEffect(() => {
     async function loadHome() {
@@ -69,6 +73,15 @@ setError('');
         ),
       };
     });
+  }
+
+  function handleTopicClick(topic) {
+    if (!topic) {
+      navigate('/');
+      return;
+    }
+
+    navigate(`/tag/${encodeURIComponent(topic.replace(/^#/, ''))}`);
   }
 
   function handlePostUpdated(postId, updatedContent) {
@@ -362,27 +375,59 @@ setError('');
           </button>
         )}
 
-        <main className="feed-main">
-       <TrendingDiscussions
-            discussions={home?.trending_discussions || []}
-            selectedTopic={selectedTopic}
-          />
+        
+<main className={`feed-main ${selectedTopic ? 'selected-tag-main' : ''}`}>
+  {selectedTopic ? (
+    <section className="selected-tag-page">
+      <nav className="tag-breadcrumb" aria-label="Breadcrumb">
+        <Link to="/">Home</Link>
+        <span aria-hidden="true">&gt;</span>
+        <span>{selectedTopic}</span>
+      </nav>
 
-          <TrendingTopics
-            topics={home?.trending_topics || []}
-            selectedTopic={selectedTopic}
-            onTopicClick={setSelectedTopic}
-          />
+      <h1>#{selectedTopic}</h1>
 
-          <PostList
-            posts={home.posts}
-            currentUser={currentUser}
-            onRequireLogin={() => navigate('/login')}
-            onPostDeleted={handlePostDeleted}
-            onPostUpdated={handlePostUpdated}
-          />
-          
-        </main>
+      <PostList
+        posts={(home.posts || []).filter((post) => {
+          const tags = [
+            ...(post.hashtags || []),
+            post.topic || '',
+            post.topic_name || '',
+          ].map((tag) =>
+            String(tag).replace(/^#/, '').trim().toLowerCase()
+          );
+
+          return tags.includes(selectedTopic.trim().toLowerCase());
+        })}
+        currentUser={currentUser}
+        onRequireLogin={() => navigate('/login')}
+        onPostDeleted={handlePostDeleted}
+        onPostUpdated={handlePostUpdated}
+      />
+    </section>
+  ) : (
+    <>
+      <TrendingDiscussions
+        discussions={home?.trending_discussions || []}
+        selectedTopic={selectedTopic}
+      />
+
+      <TrendingTopics
+        topics={home?.trending_topics || []}
+        selectedTopic={selectedTopic}
+      />
+
+      <PostList
+        posts={home.posts}
+        currentUser={currentUser}
+        onRequireLogin={() => navigate('/login')}
+        onPostDeleted={handlePostDeleted}
+        onPostUpdated={handlePostUpdated}
+      />
+    </>
+  )}
+</main>
+
       </div>
     </div>
   );

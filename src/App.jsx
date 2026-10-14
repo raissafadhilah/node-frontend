@@ -37,6 +37,8 @@ function App() {
       <Route path="/logout" element={<Logout />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/profile/edit" element={<EditProfile />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/tag/:tagName" element={<Home />} /> 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
     </BrowserRouter>
