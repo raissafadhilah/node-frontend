@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { mockHome } from '../data/homeMockData';
 import { getMockUser } from '../data/mockAuth';
+import { getMockPosts } from '../data/mockPosts';
 
 import {
   getHome,
@@ -11,6 +12,18 @@ import {
 import TrendingTopics from '../components/home/TrendingTopics';
 import TrendingDiscussions from '../components/home/TrendingDiscussions';
 import PostList from '../components/home/PostList';
+
+
+function withMockPosts(homeData) {
+  return {
+    ...homeData,
+    posts: [
+      ...getMockPosts(),
+      ...(homeData.posts || []),
+    ],
+  };
+}
+
 
 function Home() {
   const navigate = useNavigate();
@@ -35,9 +48,9 @@ function Home() {
         ]);
 
         if (homeResult.success) {
-          setHome(homeResult.data);
+          setHome(withMockPosts(homeResult.data));
         } else {
-          setHome(mockHome);
+          setHome(withMockPosts(mockHome));
           setError('');
         }
 
@@ -53,7 +66,7 @@ function Home() {
           err
         );
 
-        setHome(mockHome);
+        setHome(withMockPosts(mockHome));
 setCurrentUser(getMockUser());
 setError('');
       }

@@ -466,7 +466,9 @@ function PostCard({
       {post.media.length > 0 && (
         <div className="post-media">
           {post.media.map((media) => {
-            const mediaUrl = `http://localhost/node/${media.file_path}`;
+            const mediaUrl =
+              media.data_url ||
+              `http://localhost/node/${media.file_path}`;
 
             if (media.file_type.startsWith('image/')) {
               return (

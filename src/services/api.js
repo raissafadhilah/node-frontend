@@ -1,3 +1,6 @@
+import { USE_MOCK_AUTH } from '../data/mockAuth';
+import { createMockPost } from '../data/mockPosts';
+
 const API_BASE_URL = 'http://localhost/node/api';
 
 export async function checkApi() {
@@ -185,12 +188,23 @@ export async function deleteComment(commentId) {
 
   return result;
 }
+
+
 export async function createPost({
   caption,
   content,
   hashtags,
   media,
 }) {
+  if (USE_MOCK_AUTH) {
+    return createMockPost({
+      caption,
+      content,
+      hashtags,
+      media,
+    });
+  }
+
   const formData = new FormData();
 
   formData.append('caption', caption);
@@ -220,6 +234,8 @@ export async function createPost({
 
   return result;
 }
+
+
 export async function editPost(postId, content) {
   const response = await fetch(
     `${API_BASE_URL}/posts/edit.php`,
