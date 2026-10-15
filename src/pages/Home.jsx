@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { mockHome } from '../data/homeMockData';
 import { getMockUser } from '../data/mockAuth';
-import { getMockPosts } from '../data/mockPosts';
+
+import {
+  getMockPosts,
+  getMockPostInteraction,
+} from '../data/mockPosts';
 
 import {
   getHome,
@@ -13,17 +17,20 @@ import TrendingTopics from '../components/home/TrendingTopics';
 import TrendingDiscussions from '../components/home/TrendingDiscussions';
 import PostList from '../components/home/PostList';
 
-
 function withMockPosts(homeData) {
+  const posts = [
+    ...getMockPosts(),
+    ...(homeData.posts || []),
+  ].map((post) => ({
+    ...post,
+    ...getMockPostInteraction(post.id),
+  }));
+
   return {
     ...homeData,
-    posts: [
-      ...getMockPosts(),
-      ...(homeData.posts || []),
-    ],
+    posts,
   };
 }
-
 
 function Home() {
   const navigate = useNavigate();

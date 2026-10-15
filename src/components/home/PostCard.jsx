@@ -97,10 +97,18 @@ function PostCard({
   const [commentError, setCommentError] = useState('');
   const [editError, setEditError] = useState('');
 
-  useEffect(() => {
-    setPostContent(post.content);
-    setEditPostContent(post.content);
-  }, [post.content]);
+useEffect(() => {
+  setPostContent(post.content);
+  setEditPostContent(post.content);
+  setIsReacted(post.is_reacted ?? false);
+  setReactionCount(post.reaction_count ?? 0);
+  setIsBookmarked(post.is_bookmarked ?? false);
+}, [
+  post.content,
+  post.is_reacted,
+  post.reaction_count,
+  post.is_bookmarked,
+]);
 
   const loadComments = useCallback(async () => {
     try {
@@ -223,7 +231,10 @@ function PostCard({
     setError('');
 
     try {
-      const result = await toggleReaction(post.id);
+      const result = await toggleReaction(post.id, {
+  is_reacted: isReacted,
+  reaction_count: reactionCount,
+});
 
       setIsReacted(
         result.data.is_reacted
@@ -253,7 +264,9 @@ function PostCard({
     setBookmarkError('');
 
     try {
-      const result = await toggleBookmark(post.id);
+      const result = await toggleBookmark(post.id, {
+  is_bookmarked: isBookmarked,
+});
 
       setIsBookmarked(
         result.data.is_bookmarked

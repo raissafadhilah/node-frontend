@@ -1,5 +1,14 @@
 import { USE_MOCK_AUTH } from '../data/mockAuth';
-import { createMockPost } from '../data/mockPosts';
+import {
+  createMockPost,
+  toggleMockReaction,
+  toggleMockBookmark,
+  getMockComments,
+  createMockComment,
+  editMockComment,
+  deleteMockComment,
+} from '../data/mockPosts';
+
 
 const API_BASE_URL = 'http://localhost/node/api';
 
@@ -41,154 +50,136 @@ export async function getHome() {
   return result;
 }
 
-export async function toggleReaction(postId) {
-  const response = await fetch(
-    `${API_BASE_URL}/reactions/toggle.php`,
-    {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        post_id: postId,
-      }),
-    }
-  );
+
+export async function toggleReaction(postId, currentState = {}) {
+  if (USE_MOCK_AUTH) {
+    return toggleMockReaction(postId, currentState);
+  }
+
+  const response = await fetch(`${API_BASE_URL}/reactions/toggle.php`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ post_id: postId }),
+  });
 
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(
-      result.message || 'Gagal mengubah reaction.'
-    );
+    throw new Error(result.message || 'Gagal mengubah reaction.');
   }
 
   return result;
 }
-export async function toggleBookmark(postId) {
-  const response = await fetch(
-    `${API_BASE_URL}/bookmarks/toggle.php`,
-    {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        post_id: postId,
-      }),
-    }
-  );
+
+
+export async function toggleBookmark(postId, currentState = {}) {
+  if (USE_MOCK_AUTH) {
+    return toggleMockBookmark(postId, currentState);
+  }
+
+  const response = await fetch(`${API_BASE_URL}/bookmarks/toggle.php`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ post_id: postId }),
+  });
 
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(
-      result.message || 'Gagal mengubah bookmark.'
-    );
+    throw new Error(result.message || 'Gagal mengubah bookmark.');
   }
 
   return result;
 }
+
+
+
 export async function createComment(postId, content) {
-  const response = await fetch(
-    `${API_BASE_URL}/comments/create.php`,
-    {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        post_id: postId,
-        content: content,
-      }),
-    }
-  );
+  if (USE_MOCK_AUTH) {
+    return createMockComment(postId, content);
+  }
+
+  const response = await fetch(`${API_BASE_URL}/comments/create.php`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ post_id: postId, content }),
+  });
 
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(
-      result.message || 'Gagal membuat komentar.'
-    );
+    throw new Error(result.message || 'Gagal membuat komentar.');
   }
 
   return result;
 }
+
 export async function getComments(postId) {
+  if (USE_MOCK_AUTH) {
+    return {
+      success: true,
+      data: { comments: getMockComments(postId) },
+    };
+  }
+
   const response = await fetch(
-    `${API_BASE_URL}/comments/list.php?post_id=${postId}`,
-    {
-      method: 'GET',
-      credentials: 'include',
-    }
+    `${API_BASE_URL}/comments/list.php?post_id=${encodeURIComponent(postId)}`,
+    { credentials: 'include' }
   );
 
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(
-      result.message || 'Gagal mengambil komentar.'
-    );
+    throw new Error(result.message || 'Gagal mengambil komentar.');
   }
 
   return result;
 }
+
 export async function editComment(commentId, content) {
-  const response = await fetch(
-    `${API_BASE_URL}/comments/edit.php`,
-    {
-      method: 'PUT',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        comment_id: commentId,
-        content: content,
-      }),
-    }
-  );
+  if (USE_MOCK_AUTH) {
+    return editMockComment(commentId, content);
+  }
+
+  const response = await fetch(`${API_BASE_URL}/comments/edit.php`, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ comment_id: commentId, content }),
+  });
 
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(
-      result.message || 'Gagal mengubah komentar.'
-    );
+    throw new Error(result.message || 'Gagal mengubah komentar.');
   }
 
   return result;
 }
 
 export async function deleteComment(commentId) {
-  const response = await fetch(
-    `${API_BASE_URL}/comments/delete.php`,
-    {
-      method: 'DELETE',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        comment_id: commentId,
-      }),
-    }
-  );
+  if (USE_MOCK_AUTH) {
+    return deleteMockComment(commentId);
+  }
+
+  const response = await fetch(`${API_BASE_URL}/comments/delete.php`, {
+    method: 'DELETE',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ comment_id: commentId }),
+  });
 
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(
-      result.message || 'Gagal menghapus komentar.'
-    );
+    throw new Error(result.message || 'Gagal menghapus komentar.');
   }
 
   return result;
 }
-
 
 export async function createPost({
   caption,
