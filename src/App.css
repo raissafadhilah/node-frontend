@@ -250,7 +250,7 @@
   overflow: hidden;
 
   color: var(--node-text);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -305,8 +305,8 @@
   border: none;
   border-radius: 8px;
 
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 16px;
+  
   text-decoration: none;
 
   transition: background 0.2s ease;
@@ -340,7 +340,7 @@
 .sidebar-label {
   margin: 0 0 7px;
   color: #8d8d8d;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.04em;
 }
@@ -411,7 +411,7 @@
   border: none;
   border-radius: 7px;
 
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   text-align: left;
 
@@ -890,7 +890,7 @@
 
 .post-list article h3.post-caption {
   margin: 0 0 5px;
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.45px;
   line-height: 1.35;
@@ -899,7 +899,7 @@
 .post-list article p.post-content {
   margin: 0 0 10px;
   color: #858585;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.55;
   white-space: pre-wrap;
 }
@@ -1039,7 +1039,7 @@
   background: transparent;
   border: 0;
 
-  font-size: 11px;
+  font-size: 16px;
 }
 
 .post-action svg {
@@ -1417,8 +1417,7 @@ color: var(--node-red-dark);
 background: #f5e6e8;
 border-radius: 999px;
 
-font-size: 9px;
-font-weight: 500;
+font-size: 12px;
 line-height: 1.2;
 text-decoration: none;
 overflow-wrap: anywhere;
