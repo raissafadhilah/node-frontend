@@ -140,12 +140,15 @@ setError('');
   return (
     <div className="feed-page">
       <header className="top-header">
+
         <div className="brand">
+          <Link to="/" aria-label="Kembali ke Home">
           <img
             src="/NodeLogo.png"
             alt="Node logo"
             className="brand-logo"
           />
+          </Link>
         </div>
 
         <div className="search-bar">

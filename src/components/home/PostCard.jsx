@@ -468,14 +468,6 @@ useEffect(() => {
         <p className="post-feedback" role="alert">{postError}</p>
       )}
 
-      {post.hashtags.length > 0 && (
-        <div className="post-tags">
-          {post.hashtags.map((hashtag) => (
-            <span key={hashtag}>{hashtag}</span>
-          ))}
-        </div>
-      )}
-
       {post.media.length > 0 && (
         <div className="post-media">
           {post.media.map((media) => {

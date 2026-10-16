@@ -248,15 +248,17 @@ function CreatePost() {
   return (
     <div className="feed-page create-post-layout">
       <header className="top-header">
-        <Link to="/" className="brand">
+      
+        <div className="brand">
+          <Link to="/" aria-label="Kembali ke Home">
           <img
-            src="/node-logo.png"
+            src="/NodeLogo.png"
             alt="Node logo"
             className="brand-logo"
           />
-          <span className="brand-name">node</span>
-        </Link>
-
+          </Link>
+        </div>
+        
         <div className="search-bar">
           <span className="search-icon" aria-hidden="true">
             <Search size={21} strokeWidth={1.6} />
