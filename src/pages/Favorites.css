@@ -1,0 +1,86 @@
+.favorites-workspace {
+  max-width: 840px;
+}
+
+.favorites-content {
+  padding-top: 12px;
+}
+
+.favorites-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.favorites-heading h1 {
+  margin: 0;
+}
+
+.favorites-heading > span {
+  color: var(--node-muted);
+  font-size: 11px;
+}
+
+.favorites-post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.favorites-post-list .post-card {
+  width: 100%;
+  margin: 0;
+}
+
+.favorites-message {
+  margin: 14px 0;
+  color: var(--node-muted);
+  font-size: 12px;
+}
+
+.favorites-error {
+  color: var(--node-red);
+}
+
+.favorites-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 18px 0;
+  border-top: 1px solid var(--node-border);
+}
+
+.favorites-empty h2 {
+  margin: 0;
+  color: var(--node-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.favorites-empty p {
+  margin: 0;
+  color: var(--node-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.favorites-empty .signup-button {
+  min-width: 90px;
+  height: 32px;
+  margin-top: 4px;
+}
+
+.favorites-browse-link {
+  margin-top: 3px;
+  color: var(--node-red);
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.favorites-browse-link:hover {
+  text-decoration: underline;
+}

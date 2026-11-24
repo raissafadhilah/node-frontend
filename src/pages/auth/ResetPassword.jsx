@@ -1,5 +1,7 @@
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { ShieldCheck, Check } from 'lucide-react';
 
 import { resetPassword } from '../../services/api';
 
@@ -16,6 +18,10 @@ function ResetPassword() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isResetComplete, setIsResetComplete] = useState(false);
+
+  const hasMinLength = form.password.length >= 8;
+  const hasSpecialCharacter = /[^A-Za-z0-9]/.test(form.password);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -35,20 +41,18 @@ function ResetPassword() {
     setError('');
     setSuccess('');
 
-    if (form.password.length < 8) {
-      setError(
-        'Password harus memiliki minimal 8 karakter.'
-      );
+    if (!hasMinLength) {
+      setError('Password harus memiliki minimal 8 karakter.');
       return;
     }
 
-    if (
-      form.password !==
-      form.passwordConfirmation
-    ) {
-      setError(
-        'Password dan konfirmasi password tidak sama.'
-      );
+    if (!hasSpecialCharacter) {
+      setError('Password harus memiliki minimal satu karakter spesial.');
+      return;
+    }
+
+    if (form.password !== form.passwordConfirmation) {
+      setError('Password dan konfirmasi password tidak sama.');
       return;
     }
 
@@ -58,166 +62,173 @@ function ResetPassword() {
       const result = await resetPassword(form);
 
       if (result.success) {
-        setSuccess(
-          result.message ||
-            'Password berhasil diubah.'
-        );
-
         setForm({
           password: '',
           passwordConfirmation: '',
         });
 
-        setTimeout(() => {
-          navigate('/login');
-        }, 1000);
+        setIsResetComplete(true);
       } else {
         setError(
-          result.message ||
-            'Gagal mengubah password.'
+          result.message || 'Gagal mengubah password.'
         );
       }
     } catch (err) {
       setError(
-        err.message ||
-          'Terjadi kesalahan saat mengubah password.'
+        err.message || 'Terjadi kesalahan saat mengubah password.'
       );
     } finally {
       setLoading(false);
     }
   }
 
-  return (
-    <main className="auth-page">
+  if (isResetComplete) {
+    return (
+      <main className="reset-password-page">
 
-      {/* LEFT PANEL */}
-      <section className="auth-panel">
+        <section className="reset-success-container">
 
-        {/* BRAND */}
-        <div className="auth-brand">
-          <img
-            src="/node-logo.png"
-            alt="Node logo"
-            className="auth-brand-logo"
-          />
+          {/* SUCCESS ICON */}
+          <div className="reset-success-icon">
+            <Check size={25} strokeWidth={3} />
+          </div>
 
-          <span className="auth-brand-name">
-            node
-          </span>
-        </div>
-
-        {/* CONTENT */}
-        <div className="auth-content">
-
-          <div className="auth-heading">
-            <h1>
-              Create a new password.
-            </h1>
+          {/* HEADING */}
+          <div className="reset-success-heading">
+            <h1>Password reset!</h1>
 
             <p>
-              Choose a new password for your
-              account. Make sure it is at least
-              8 characters long.
+              You've successfully created a new password,
+              click below to sign in.
             </p>
           </div>
 
-          <form
-            className="auth-form"
-            onSubmit={handleSubmit}
+          {/* SIGN IN */}
+          <Link
+            to="/login"
+            className="reset-success-button"
           >
+            Sign in
+          </Link>
 
-            {/* NEW PASSWORD */}
-            <div className="auth-field">
-              <label htmlFor="password">
-                New password
-              </label>
+        </section>
 
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="Enter your new password..."
-                autoComplete="new-password"
-                minLength={8}
-                required
-              />
-            </div>
+      </main>
+    );
+  }
+  return (
+    <main className="reset-password-page">
 
-            {/* CONFIRM PASSWORD */}
-            <div className="auth-field">
-              <label htmlFor="passwordConfirmation">
-                Confirm new password
-              </label>
+      <section className="reset-password-container">
 
-              <input
-                type="password"
-                id="passwordConfirmation"
-                name="passwordConfirmation"
-                value={form.passwordConfirmation}
-                onChange={handleChange}
-                placeholder="Confirm your new password..."
-                autoComplete="new-password"
-                minLength={8}
-                required
-              />
-            </div>
-
-            {/* MESSAGE */}
-            {error && (
-              <div className="auth-message auth-message-error">
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="auth-message auth-message-success">
-                {success}
-              </div>
-            )}
-
-            {/* SUBMIT */}
-            <button
-              type="submit"
-              className="auth-submit"
-              disabled={loading}
-            >
-              {loading
-                ? 'Updating password...'
-                : 'Reset password'}
-            </button>
-
-          </form>
-
-          {/* LOGIN */}
-          <p className="auth-register">
-            Remember your password?
-
-            <Link to="/login">
-              Sign in
-            </Link>
-          </p>
-
-        </div>
-
-        {/* FOOTER */}
-        <footer className="auth-footer">
-          © 2026 node. All Rights Reserved.
-        </footer>
-
-      </section>
-
-      {/* RIGHT IMAGE */}
-      <section className="auth-image-panel">
-
-        <div className="auth-image-wrapper">
+        {/* ICON */}
+        <div className="reset-password-icon">
           <img
-            src="/node-auth-image.png"
-            alt="Node community"
-            className="auth-image"
+            src="/key-icon.png"
+            alt="Key"
+            className="reset-password-key-image"
           />
         </div>
+
+        {/* HEADING */}
+        <div className="reset-password-heading">
+          <h1>Set a new password</h1>
+
+          <p>
+            Your new password must be different from previously used passwords.
+          </p>
+        </div>
+
+        {/* FORM */}
+        <form
+          className="reset-password-form"
+          onSubmit={handleSubmit}
+        >
+
+          {/* PASSWORD */}
+          <div className="reset-password-field">
+            <label htmlFor="password">
+              Password
+            </label>
+
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="Enter your password"
+              autoComplete="new-password"
+              minLength={8}
+              required
+            />
+          </div>
+
+          {/* CONFIRM PASSWORD */}
+          <div className="reset-password-field">
+            <label htmlFor="passwordConfirmation">
+              Confirm Password
+            </label>
+
+            <input
+              type="password"
+              id="passwordConfirmation"
+              name="passwordConfirmation"
+              value={form.passwordConfirmation}
+              onChange={handleChange}
+              placeholder="Confirm your password"
+              autoComplete="new-password"
+              minLength={8}
+              required
+            />
+          </div>
+
+          {/* PASSWORD REQUIREMENTS */}
+          <div className="password-requirements">
+
+            <div className={`password-requirement ${hasMinLength ? 'valid' : ''}`}>
+              <ShieldCheck size={20} strokeWidth={1.8} />
+              <span>Must be at least 8 characters.</span>
+            </div>
+
+            <div className={`password-requirement ${hasSpecialCharacter ? 'valid' : ''}`}>
+              <ShieldCheck size={20} strokeWidth={1.8} />
+              <span>Must contain one special character.</span>
+            </div>
+
+          </div>
+
+          {/* MESSAGE */}
+          {error && (
+            <div className="reset-password-message error">
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="reset-password-message success">
+              {success}
+            </div>
+          )}
+
+          {/* SUBMIT */}
+          <button
+            type="submit"
+            className="reset-password-submit"
+            disabled={loading}
+          >
+            {loading ? 'Updating password...' : 'Reset Password'}
+          </button>
+
+        </form>
+
+        {/* BACK TO LOGIN */}
+        <Link
+          to="/login"
+          className="reset-password-back"
+        >
+          <span>←</span> Back to log in
+        </Link>
 
       </section>
 

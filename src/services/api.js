@@ -36,15 +36,39 @@ export async function getCurrentUser() {
   return result;
 }
 
-export async function getHome() {
-  const response = await fetch(`${API_BASE_URL}/home/index.php`, {
-    credentials: 'include',
-  });
+export async function getHome(trendingLimit = 3) {
+  const response = await fetch(
+    `${API_BASE_URL}/home/index.php?trending_limit=${encodeURIComponent(trendingLimit)}`,
+    {
+      credentials: 'include',
+    }
+  );
 
   const result = await response.json();
 
   if (!response.ok) {
     throw new Error(result.message || 'Gagal mengambil data Home.');
+  }
+
+  return result;
+}
+
+
+export async function getExplorePosts(filter = 'all') {
+  const response = await fetch(
+    `${API_BASE_URL}/explore/index.php?filter=${encodeURIComponent(filter)}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(
+      result.message || 'Gagal mengambil data Explore.'
+    );
   }
 
   return result;
@@ -181,9 +205,11 @@ export async function deleteComment(commentId) {
   return result;
 }
 
+
 export async function createPost({
   caption,
   content,
+  category,
   hashtags,
   media,
 }) {
@@ -191,6 +217,7 @@ export async function createPost({
     return createMockPost({
       caption,
       content,
+      category,
       hashtags,
       media,
     });
@@ -200,6 +227,7 @@ export async function createPost({
 
   formData.append('caption', caption);
   formData.append('content', content);
+  formData.append('category', category);
   formData.append('hashtags', hashtags);
 
   if (media) {
@@ -624,6 +652,106 @@ export async function changePassword({
 
   if (!response.ok) {
     return result;
+  }
+
+  return result;
+}
+
+
+export async function searchNode(query) {
+  const keyword = String(query || '').trim();
+
+  if (!keyword) {
+    return {
+      success: true,
+      data: {
+        users: [],
+        posts: [],
+      },
+    };
+  }
+
+  const response = await fetch(
+    `${API_BASE_URL}/search/index.php?q=${encodeURIComponent(keyword)}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(
+      result.message || 'Gagal melakukan pencarian.'
+    );
+  }
+
+  return result;
+}
+
+
+export async function getNotifications() {
+  const response = await fetch(
+    `${API_BASE_URL}/notifications/list.php`,
+    {
+      method: 'GET',
+      credentials: 'include',
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(
+      result.message || 'Gagal mengambil notifikasi.'
+    );
+  }
+
+  return result;
+}
+
+export async function markNotificationRead(notificationId) {
+  const response = await fetch(
+    `${API_BASE_URL}/notifications/read.php`,
+    {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        notification_id: notificationId,
+      }),
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(
+      result.message || 'Gagal menandai notifikasi.'
+    );
+  }
+
+  return result;
+}
+
+export async function markAllNotificationsRead() {
+  const response = await fetch(
+    `${API_BASE_URL}/notifications/read-all.php`,
+    {
+      method: 'POST',
+      credentials: 'include',
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(
+      result.message || 'Gagal menandai semua notifikasi.'
+    );
   }
 
   return result;

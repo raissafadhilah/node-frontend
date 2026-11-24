@@ -30,12 +30,6 @@ function TrendingTopics({
     <aside className="trending-topics">
       <div className="trending-topics-heading">
         <h2>Trending Topics</h2>
-
-        {selectedTopic && (
-          <Link to="/" className="clear-topic-button">
-            Reset
-          </Link>
-        )}
       </div>
 
       <div className="topic-list">

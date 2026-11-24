@@ -1,9 +1,4 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* =========================================================
-   NODE DESIGN SYSTEM
-========================================================= */
 
 :root {
   --node-red: #a90000;
@@ -23,10 +18,6 @@
   --node-green: #dff7e8;
   --node-green-text: #23824b;
 }
-
-/* =========================================================
-   GLOBAL
-========================================================= */
 
 .feed-page {
   min-height: 100vh;
@@ -62,10 +53,6 @@
   font-size: 13px;
 }
 
-/* =========================================================
-   HEADER
-========================================================= */
-
 .top-header {
   position: sticky;
   top: 0;
@@ -96,7 +83,6 @@
   height: 34px;
   object-fit: contain;
   max-width: 100%;
-  object-fit: contain;
   object-position: left center;
 }
 
@@ -158,11 +144,11 @@
 }
 
 .notification-button {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 38px;
-
   width: 38px;
   height: 38px;
   padding: 0;
@@ -215,9 +201,13 @@
 .header-user {
   display: flex;
   align-items: center;
-  gap: 9px;
-  min-width: 0;
-  text-decoration: none;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
 }
 
 .header-user-avatar {
@@ -256,9 +246,158 @@
   white-space: nowrap;
 }
 
-/* =========================================================
-   MAIN LAYOUT
-========================================================= */
+/* ACCOUNT DROPDOWN */
+
+.header-account {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.header-user {
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.account-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 200;
+
+  width: 230px;
+  padding: 8px;
+
+  background: var(--node-white);
+  border: 1px solid var(--node-border);
+  border-radius: 10px;
+
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+
+.account-dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px;
+  min-width: 0;
+}
+
+.account-dropdown-avatar {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--node-red-soft);
+  color: var(--node-red);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.account-dropdown-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.account-dropdown-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.account-dropdown-info strong {
+  color: var(--node-text);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-dropdown-info span {
+  color: var(--node-muted);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-dropdown-divider {
+  height: 1px;
+  margin: 5px 0;
+  background: var(--node-border);
+}
+
+.account-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  width: 100%;
+  min-height: 40px;
+  padding: 0 12px;
+
+  color: var(--node-text);
+  background: transparent;
+  border-radius: 7px;
+
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.account-dropdown-item:hover {
+  color: var(--node-red);
+  background: var(--node-red-soft);
+}
+
+.account-dropdown-item>span:first-child {
+  width: 18px;
+  text-align: center;
+}
+
+.account-dropdown-item.account-logout {
+  color: var(--node-red);
+}
+
+.logout-link-error {
+  display: block;
+  padding: 3px 12px 7px;
+  color: var(--node-red);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.logout-state {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--node-bg);
+  color: var(--node-text);
+  font-size: 13px;
+}
+
+.logout-state p {
+  margin: 0;
+}
+
+.logout-state a {
+  color: var(--node-red);
+}
 
 .feed-layout {
   position: relative;
@@ -267,16 +406,16 @@
   min-height: calc(100vh - 70px);
 }
 
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
+/* Sidebar */
 .sidebar {
-  position: relative;
-  z-index: 2;
+  position: sticky;
+  top: 70px;
+  align-self: flex-start;
+  z-index: 30;
 
   flex: 0 0 208px;
   width: 208px;
+  height: calc(100vh - 70px);
   padding: 11px 17px 28px;
 
   background: var(--node-white);
@@ -305,8 +444,8 @@
   border: none;
   border-radius: 8px;
 
-  font-size: 16px;
-  
+  font-size: 12px;
+  font-weight: 500;
   text-decoration: none;
 
   transition: background 0.2s ease;
@@ -340,15 +479,10 @@
 .sidebar-label {
   margin: 0 0 7px;
   color: #8d8d8d;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.04em;
 }
-
-/*
-  Tombol toggle diposisikan tepat di atas garis pemisah.
-  Posisi absolute mencegah tombol mengubah lebar menu.
-*/
 
 .sidebar-heading {
   display: flex;
@@ -365,7 +499,7 @@
   position: absolute;
   top: 64px;
   right: -15px;
-  z-index: 5;
+  z-index: 35;
 
   display: inline-flex;
   align-items: center;
@@ -411,7 +545,7 @@
   border: none;
   border-radius: 7px;
 
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   text-align: left;
 
@@ -435,16 +569,11 @@
   height: 17px;
 }
 
-/*
-  Saat sidebar tertutup, tombol pembuka berada di sisi kiri
-  layout. Padding konten ditambah agar tombol tidak menutupi feed.
-*/
-
 .sidebar-reopen-button {
-  position: absolute;
-  top: 12px;
+  position: fixed;
+  top: 82px;
   left: 12px;
-  z-index: 5;
+  z-index: 35;
 
   display: inline-flex;
   align-items: center;
@@ -467,32 +596,26 @@
   padding-left: 56px;
 }
 
-/* =========================================================
-   MAIN FEED GRID
-========================================================= */
-
 .feed-main {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 148px;
   grid-template-areas:
-    "discussions"
-    "divider"
-    "posts";
+    "discussions topics"
+    "divider topics"
+    "posts topics";
   align-content: start;
-  align-items: start;
-
   flex: 1;
   min-width: 0;
+  column-gap: 5px;
   padding: 12px 22px 48px;
 }
 
-/* Area utama tidak mengikuti tinggi Trending Topics */
 .trending-discussions,
 .feed-divider,
 .post-list {
   grid-column: 1;
-  width: calc(100% - 202px);
+  width: 100%;
   min-width: 0;
 }
 
@@ -512,17 +635,21 @@
 }
 
 .post-list {
-  padding-top: 10px;
+  padding-top: 8px;
   grid-area: posts;
   max-width: 100%;
 }
+
 
 /* =========================================================
    TRENDING DISCUSSIONS
 ========================================================= */
 
 .trending-discussions {
+  width: 100%;
   min-width: 0;
+  padding-bottom: 10px;
+  margin-bottom: 2px;
 }
 
 .trending-discussions .section-heading {
@@ -531,28 +658,30 @@
   justify-content: space-between;
   gap: 12px;
   width: 100%;
-  margin: 0 0 10px;
+  margin: 0 0 7px;
 }
 
 .trending-discussions .section-heading h2 {
   margin: 0;
   color: var(--node-text);
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: -0.45px;
+  letter-spacing: -0.2px;
 }
 
-/* Tombol See more */
 .see-more-button {
+  display: inline-flex;
+  align-items: center;
   flex-shrink: 0;
-  padding: 5px 8px;
+  padding: 3px 6px;
   color: var(--node-red-dark);
   background: transparent;
   border: 0;
   border-radius: 6px;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
+  text-decoration: none;
   transition: background 0.2s ease;
 }
 
@@ -560,77 +689,84 @@
   background: #f5e6e8;
 }
 
-/* Grid kartu */
+/* CARD GRID */
 .trending-discussion-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 7px;
   width: 100%;
-  align-items: start;
+  align-items: stretch;
 }
 
-/* Kartu diskusi */
+@media (min-width: 801px) {
+  .trending-discussion-list > .empty-state {
+    grid-column: 1 / -1;
+    min-height: 130px;
+  }
+}
+
+/* CARD */
 .trending-discussion-card {
   display: flex;
   flex-direction: column;
-  align-self: start;
+  align-items: stretch;
   min-width: 0;
-  min-height: 0;
-  height: auto;
-  padding: 12px;
+  height: 100%;
+  min-height: 125px;
+  box-sizing: border-box;
+  padding: 10px;
   overflow-wrap: anywhere;
 
   background: var(--node-white);
   border: 1px solid var(--node-border-light);
-  border-radius: 9px;
+  border-radius: 10px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.025);
 
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .trending-discussion-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.045);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
-/* Informasi pengguna */
+/* USER */
 .trending-discussion-card .discussion-user {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
-  margin-bottom: 9px;
+  margin: 0 0 6px;
 }
 
 .trending-discussion-card .discussion-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 30px;
-  width: 30px;
-  height: 30px;
+  flex: 0 0 26px;
+  width: 26px;
+  min-width: 26px;
+  height: 26px;
+  min-height: 26px;
   overflow: hidden;
-
   color: #555;
   background: #eee;
   border-radius: 50%;
-
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
 }
 
-.trending-discussion-card .discussion-user > div:last-child {
+.trending-discussion-card .discussion-user>div:last-child {
+  flex: 1;
   min-width: 0;
 }
 
 .trending-discussion-card .discussion-user strong {
   display: block;
   overflow: hidden;
-  margin-bottom: 2px;
+  margin: 0 0 2px;
   color: var(--node-text);
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -640,77 +776,129 @@
   display: block;
   overflow: hidden;
   color: var(--node-muted);
-  font-size: 12px;
+  font-size: 9px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Isi diskusi */
+.trending-discussion-card .discussion-avatar-fallback {
+  font-size: 9px;
+}
+
+/* DISCUSSION TEXT */
 .trending-discussion-card .discussion-content {
   display: -webkit-box;
-  margin: 0 0 9px;
+  flex: 0 1 auto;
+
+  width: 100%;
+  min-width: 0;
+  max-height: calc(1.4em * 2);
+  min-height: 0;
+
+  margin: 0 0 6px;
   overflow: hidden;
+  overflow-wrap: anywhere;
+  text-overflow: ellipsis;
 
   color: var(--node-text);
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.4;
 
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
-/* Hashtag */
+/* META */
+.trending-discussion-card .discussion-meta {
+  order: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 18px;
+  margin: 0;
+  padding: 0;
+
+  color: var(--node-muted);
+  border: 0;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.trending-discussion-card .discussion-meta svg {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+}
+
+/* TAGS */
 .trending-discussion-card .discussion-tags {
+  order: 0;
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
   align-items: flex-start;
-  gap: 5px;
-  margin: 0 0 8px;
+  gap: 4px;
+  min-height: 18px;
+  margin: 6px 0 0;
+  padding: 0;
+}
+
+.trending-discussion-card .discussion-tags .discussion-tag-link {
+  padding: 2px 7px;
+  font-size: 8px;
+  line-height: 1.4;
 }
 
 .trending-discussion-card .discussion-tags span {
   display: inline-flex;
   align-items: center;
   max-width: 100%;
-  padding: 4px 8px;
+  box-sizing: border-box;
+  padding: 2px 7px;
 
   color: var(--node-red-dark);
   background: #f5e6e8;
   border: 1px solid transparent;
   border-radius: 999px;
 
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 500;
+  line-height: 1.4;
   overflow-wrap: anywhere;
 }
 
-/* Ikon dan jumlah komentar */
-.trending-discussion-card .discussion-meta {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  align-self: flex-start;
-
-  margin-top: 0;
-  padding-top: 4px;
-
-  color: var(--node-muted);
-  border: 0;
-  font-size: 12px;
-  line-height: 1.4;
-}
-
-.trending-discussion-card .discussion-meta svg {
-  width: 12px;
-  height: 12px;
-}
-
-/* Kartu horizontal dan vertikal tidak dipaksa tinggi */
+/* PREVENT OLD CARD VARIANTS FROM OVERRIDING THE GRID */
 .trending-discussion-card.discussion-card-horizontal,
 .trending-discussion-card.discussion-card-vertical {
-  min-height: 0;
-  height: auto;
+  align-self: stretch;
+  height: 100%;
+  min-height: 125px;
+  box-sizing: border-box;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1000px) {
+  .trending-discussion-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .trending-discussion-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .trending-discussion-card,
+  .trending-discussion-card.discussion-card-horizontal,
+  .trending-discussion-card.discussion-card-vertical {
+    min-height: 230px;
+  }
+
+  .trending-discussions .section-heading h2 {
+    font-size: 20px;
+  }
 }
 
 /* =========================================================
@@ -718,15 +906,16 @@
 ========================================================= */
 
 .trending-topics {
-  position: absolute;
-  top: 12px;
-  right: 22px;
-  width: 190px;
+  position: static;
+  grid-area: topics;
+  align-self: start;
+  width: 100%;
   min-width: 0;
-  padding: 12px;
+  padding: 10px;
 
   background: var(--node-white);
-  border-radius: 9px;
+  border: 1px solid var(--node-border-light);
+  border-radius: 10px;
 }
 
 .trending-topics-heading {
@@ -739,19 +928,17 @@
 .trending-topics h2 {
   margin: 0;
   color: var(--node-text);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.2px;
 }
 
-/* Susunan tag topik */
-/* Semua tag mengalir dalam satu daftar */
 .topic-list {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  gap: 7px 6px;
-  margin-top: 10px;
+  gap: 4px;
+  margin-top: 7px;
 }
 
 .fixed-topics,
@@ -761,7 +948,6 @@
   border: 0;
 }
 
-/* Semua tag memiliki warna dan bentuk konsisten */
 .topic-tag {
   appearance: none;
   -webkit-appearance: none;
@@ -771,9 +957,9 @@
   justify-content: center;
   flex: 0 0 auto;
 
-  min-height: 25px;
+  min-height: 18px;
   max-width: 100%;
-  padding: 5px 10px;
+  padding: 2px 7px;
 
   color: var(--node-red-dark);
   background: #f5e6e8;
@@ -781,7 +967,7 @@
   border-radius: 999px;
 
   font-family: inherit;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 500;
   line-height: 1.2;
   white-space: nowrap;
@@ -801,7 +987,7 @@
   color: var(--node-red-dark);
   background: #efd6da;
   border-color: #e7c4ca;
-   text-decoration: none;
+  text-decoration: none;
 }
 
 .topic-tag.topic-tag-active {
@@ -810,7 +996,6 @@
   border-color: var(--node-red-dark);
 }
 
-/* Tombol Reset filter */
 .clear-topic-button {
   flex-shrink: 0;
   padding: 4px 7px;
@@ -872,7 +1057,7 @@
   line-height: 1.5;
 }
 
-.post-list article > p:first-child {
+.post-list article>p:first-child {
   margin-bottom: 12px;
   color: var(--node-text);
   font-size: 13px;
@@ -904,7 +1089,7 @@
   white-space: pre-wrap;
 }
 
-.post-list article h3 + p {
+.post-list article h3+p {
   color: #9a9a9a;
   font-size: 15px;
 }
@@ -914,7 +1099,7 @@
 .post-author {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   min-width: 0;
   margin-bottom: 9px;
 }
@@ -956,6 +1141,14 @@
   font-size: 12px;
 }
 
+.post-status-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
 .post-status {
   max-width: 170px;
   overflow: hidden;
@@ -993,31 +1186,204 @@
   background: var(--node-red-soft);
 }
 
-/* Post tags and media */
+/* Header & Menu Tiga Titik */
+
+.post-card .post-menu-container {
+  position: relative;
+  flex-shrink: 0;
+  margin-left: auto;
+  align-self: flex-start;
+}
+
+.post-card button.post-menu-trigger {
+  appearance: none;
+  -webkit-appearance: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  min-height: 36px;
+
+  margin: -4px -6px 0 0;
+  padding: 0;
+
+  color: #222;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  box-shadow: none;
+
+  cursor: pointer;
+}
+
+.post-card button.post-menu-trigger:hover,
+.post-card button.post-menu-trigger[aria-expanded="true"] {
+  background: #f5f5f5;
+}
+
+.post-card button.post-menu-trigger svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.post-card .post-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  right: 0;
+
+  width: 190px;
+  padding: 6px;
+
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
+}
+
+.post-card .post-menu button {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 12px;
+
+  color: #222;
+  text-align: left;
+  font: inherit;
+
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.post-card .post-menu button:hover {
+  background: #f7f7f7;
+}
+
+.post-card .post-menu button.post-menu-danger {
+  color: #b00020;
+}
+
+.post-card .post-menu button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Post tags */
 
 .post-tags {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 5px;
-  margin: 0 0 9px;
+  gap: 6px;
+  margin: 0;
 }
 
-.post-media {
-  display: grid;
-  gap: 8px;
-  margin: 10px 0;
+.post-tag-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  padding: 4px 8px;
+
+  color: var(--node-red-dark);
+  background: #efd6da;
+  border-radius: 999px;
+
+  font-size: 12px;
+  line-height: 1.2;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+
+  transition: background 0.2s ease;
 }
 
-.post-media img,
-.post-media video {
+/* =========================================================
+   NODE — POST MEDIA (PERBAIKAN BLUR BACKGROUND)
+========================================================= */
+
+.post-card .post-media {
   display: block;
   width: 100%;
-  max-width: 520px;
-  max-height: 420px;
-  object-fit: contain;
+  margin-top: 14px;
+}
 
-  background: #f7f7f7;
-  border-radius: 8px;
+.post-card .post-media-image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  overflow: hidden;
+
+  width: 100%;
+  height: clamp(280px, 40vw, 380px);
+  padding: 0;
+  background: #1a1a1a;
+  border-radius: 12px;
+}
+
+/* Gambar Blur sebagai Background */
+.post-card .post-media-image img.post-media-blur {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+
+  display: block;
+  width: 120%;
+  height: 120%;
+  max-width: none;
+  max-height: none;
+
+  object-fit: cover;
+  object-position: center;
+
+  filter: blur(30px) brightness(0.85) saturate(1.2);
+  opacity: 1;
+  transform: scale(1.08);
+
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Gambar Utama Tajam di Tengah */
+.post-card .post-media-image img.post-media-main {
+  position: relative;
+  z-index: 1;
+
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+
+  object-fit: contain;
+  object-position: center;
+  filter: none;
+  opacity: 1;
+}
+
+/* Video Frame */
+.post-card .post-media>video {
+  display: block;
+  width: 100%;
+  height: clamp(280px, 40vw, 380px);
+  max-width: 100%;
+  object-fit: contain;
+  background: #1a1a1a;
+  border-radius: 12px;
 }
 
 /* Post actions */
@@ -1095,8 +1461,8 @@
   font-size: 11px;
 }
 
-.post-edit-form button + button,
-.comment-item form button + button {
+.post-edit-form button+button,
+.comment-item form button+button {
   color: var(--node-secondary);
   background: #f1f1f1;
 }
@@ -1112,7 +1478,7 @@
   font-size: 12px;
 }
 
-.comments-panel > p {
+.comments-panel>p {
   font-size: 11px !important;
 }
 
@@ -1137,28 +1503,267 @@
   margin-top: 10px;
 }
 
+.discussion-tag-link {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 4px 8px;
+  color: var(--node-red-dark);
+  background: #f5e6e8;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.discussion-tag-link:hover {
+  background: #efd6da;
+}
+
+
+
+.feed-main.selected-tag-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 148px;
+  grid-template-areas: "selected-tag topics";
+  align-content: start;
+  align-items: start;
+  flex: 1;
+  min-width: 0;
+  column-gap: 59px;
+  padding: 22px 8px 48px 44px;
+  box-sizing: border-box;
+}
+
+
+
+.selected-tag-page {
+  grid-area: selected-tag;
+  width: 100%;
+  max-width: 796px;
+  min-width: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Breadcrumb */
+.selected-tag-page .tag-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 17px;
+  padding: 0;
+  color: #888888;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.selected-tag-page .tag-breadcrumb a {
+  color: #888888;
+  text-decoration: none;
+}
+
+.selected-tag-page .tag-breadcrumb a:hover {
+  color: #666666;
+  text-decoration: none;
+}
+
+/* Judul hashtag dan garis pemisah */
+.selected-tag-page h1 {
+  margin: 0 0 11px;
+  padding: 0 0 9px;
+  border-bottom: 1px solid #d6d6d6;
+  color: #222222;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* Postingan memenuhi lebar kolom hashtag */
+.selected-tag-page .post-list {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding-top: 0;
+}
+
+.selected-tag-page .post-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+}
+
+.selected-tag-page .post-list-items>* {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+}
+
+.selected-tag-page .post-card {
+  display: flex;
+  flex-direction: column;
+  padding: 11px 14px 11px 15px;
+}
+
+.selected-tag-page .post-card .post-author {
+  gap: 4px;
+  order: 0;
+  margin-bottom: 5px;
+}
+
+.selected-tag-page .post-card .post-avatar {
+  flex-basis: 27px;
+  width: 27px;
+  height: 27px;
+  min-width: 27px;
+  min-height: 27px;
+}
+
+.selected-tag-page .post-card .post-author-info strong {
+  font-size: 12px;
+}
+
+.selected-tag-page .post-card .post-author-info span {
+  font-size: 10px;
+}
+
+.selected-tag-page .post-card .post-status {
+  padding: 2px 8px;
+  font-size: 9px;
+}
+
+.selected-tag-page .post-card .post-tag-link {
+  padding: 3px 8px;
+  font-size: 9px;
+}
+
+.selected-tag-page .post-card button.post-menu-trigger {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  min-height: 24px;
+  margin: -1px -6px 0 0;
+}
+
+.selected-tag-page .post-card button.post-menu-trigger svg {
+  width: 16px;
+  height: 16px;
+}
+
+.selected-tag-page .post-card .post-media {
+  order: 1;
+  margin-top: 0;
+  margin-bottom: 17px;
+}
+
+.selected-tag-main .trending-topics {
+  position: relative;
+  top: -11px;
+}
+
+.selected-tag-page .post-card .post-media-image,
+.selected-tag-page .post-card .post-media>video {
+  height: clamp(220px, 24.3vw, 280px);
+  border-radius: 8px;
+}
+
+.selected-tag-page .post-card .post-caption {
+  order: 2;
+  margin-bottom: 5px;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+}
+
+.selected-tag-page .post-card .post-edit-form,
+.selected-tag-page .post-card p.post-content {
+  order: 3;
+}
+
+.selected-tag-page .post-card p.post-content {
+  margin-bottom: 8px;
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.selected-tag-page .post-card .post-feedback {
+  order: 4;
+}
+
+.selected-tag-page .post-card .post-actions {
+  order: 5;
+  margin-top: 4px;
+}
+
+.selected-tag-page .post-card .comments-panel {
+  order: 6;
+}
+
+
 /* =========================================================
-   RESPONSIVE: TABLET
+   RESPONSIVE: TABLET & MOBILE
 ========================================================= */
+
+@media (min-width: 1001px) and (max-width: 1200px) {
+  .feed-layout.has-selected-tag>.sidebar {
+    flex-basis: 208px;
+    width: 208px;
+  }
+}
 
 @media (max-width: 1200px) {
   .sidebar {
-    flex-basis: 190px;
-    width: 190px;
+    flex-basis: 208px;
+    width: 208px;
+    padding-right: 18px;
+    padding-left: 24px;
   }
 
   .brand {
-    min-width: 170px;
+    min-width: 179px;
+  }
+
+  .brand-logo {
+    width: 100px;
+    height: 32px;
   }
 
   .feed-main {
-    padding-right: 18px;
-    padding-left: 18px;
+    padding-right: 8px;
+    padding-left: 19px;
   }
 }
 
 @media (max-width: 1000px) {
- .feed-main {
+  .feed-main.selected-tag-main {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "selected-tag"
+      "topics";
+    row-gap: 18px;
+    padding: 22px 18px 40px;
+  }
+
+  .selected-tag-page {
+    max-width: none;
+  }
+
+  .selected-tag-main .trending-topics {
+    top: 0;
+  }
+}
+
+@media (max-width: 800px) {
+  .feed-main {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
@@ -1169,7 +1774,7 @@
     row-gap: 10px;
   }
 
-.trending-discussions,
+  .trending-discussions,
   .feed-divider,
   .post-list {
     width: 100%;
@@ -1188,9 +1793,7 @@
   .trending-discussion-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-}
 
-@media (max-width: 800px) {
   .top-header {
     height: 64px;
     padding: 0 16px;
@@ -1213,12 +1816,22 @@
   }
 
   .sidebar {
+    top: 64px;
     flex-basis: 178px;
     width: 178px;
+    height: calc(100vh - 64px);
+  }
+
+  .sidebar-reopen-button {
+    top: 76px;
   }
 
   .feed-main {
     padding: 14px 14px 32px;
+  }
+
+  .feed-main.selected-tag-main {
+    padding: 18px 14px 32px;
   }
 
   .sidebar-collapsed .feed-main {
@@ -1229,10 +1842,6 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-
-/* =========================================================
-   RESPONSIVE: MOBILE
-========================================================= */
 
 @media (max-width: 600px) {
   .top-header {
@@ -1267,16 +1876,13 @@
     min-height: calc(100vh - 60px);
   }
 
-  /*
-    Pada layar kecil, sidebar menjadi panel overlay.
-    Jadi sidebar tetap bisa dibuka kembali melalui toggle.
-  */
-
   .sidebar {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
+    height: auto;
+    align-self: auto;
     z-index: 90;
 
     width: min(230px, 82vw);
@@ -1284,6 +1890,10 @@
 
     background: var(--node-white);
     box-shadow: 5px 0 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .sidebar-reopen-button {
+    top: 72px;
   }
 
   .sidebar-hidden {
@@ -1296,6 +1906,10 @@
 
   .feed-main {
     padding: 12px 10px 24px;
+  }
+
+  .feed-main.selected-tag-main {
+    padding: 16px 10px 24px;
   }
 
   .sidebar-collapsed .feed-main {
@@ -1317,116 +1931,328 @@
   .post-list article h3.post-caption {
     font-size: 15px;
   }
-  
-}
-/* Tag pada Trending Discussions */
-.trending-discussion-card .discussion-meta {
-  order: 2;
-  margin-top: 0;
-  padding-top: 0;
 }
 
-.trending-discussion-card .discussion-tags {
-  order: 3;
-  margin-top: 10px;
-  margin-bottom: 0;
-  padding-top: 0;
+
+.notification-button {
+  position: relative;
 }
 
-.discussion-tag-link {
-  display: inline-flex;
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -6px;
+  z-index: 2;
+  display: flex;
   align-items: center;
-  max-width: 100%;
-  padding: 4px 8px;
-  color: var(--node-red-dark);
-  background: #f5e6e8;
+  justify-content: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border: 2px solid #fff;
   border-radius: 999px;
-  font-size: 12px;
-  font-weight: 500;
-  text-decoration: none;
-  overflow-wrap: anywhere;
-}
-
-.discussion-tag-link:hover {
-  background: #efd6da;
-}
-
-/* Halaman Selected Tag */
-.feed-main.selected-tag-main {
-  display: block;
-  width: 100%;
-}
-
-.selected-tag-page {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.tag-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin-bottom: 18px;
-  color: var(--node-secondary);
-  font-size: 12px;
-}
-
-.tag-breadcrumb a {
-  color: var(--node-red-dark);
-  text-decoration: none;
-}
-
-.tag-breadcrumb a:hover {
-  text-decoration: none;
-}
-
-.selected-tag-page h1 {
-  margin: 0 0 18px;
-  color: var(--node-text);
-  font-size: 26px;
+  background: #a90000;
+  color: #fff;
+  font-size: 10px;
   font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
-
-/* Status pengguna dan tag postingan */
-.post-status-group {
+/* Avatar pada header postingan */
+.post-avatar {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  min-width: 0;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.post-tags {
+.post-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  display: block;
+}
+
+.post-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.discussion-avatar {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.discussion-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  display: block;
+}
+
+.discussion-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.page-placeholder {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 20px;
+}
+
+.page-placeholder h1 {
+  margin: 0 0 12px;
+}
+
+.page-placeholder p {
   margin: 0;
+  color: #888;
+  font-size: 15px;
 }
 
-.post-tag-link {
-display: inline-flex;
-align-items: center;
-justify-content: center;
-max-width: 100%;
-padding: 4px 8px;
-
-color: var(--node-red-dark);
-background: #f5e6e8;
-border-radius: 999px;
-
-font-size: 12px;
-line-height: 1.2;
-text-decoration: none;
-overflow-wrap: anywhere;
-cursor: pointer;
-
-transition: background 0.2s ease;
+/* Sidebar navigation links */
+.sidebar a.sidebar-item {
+  text-decoration: none;
+  color: inherit;
 }
 
-.post-tag-link {
-background: #efd6da;
+.sidebar a.sidebar-item:hover {
+  text-decoration: none;
+}
 
+.sidebar a.sidebar-item:visited {
+  text-decoration: none;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-card {
+  padding: 14px 15px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-author {
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-avatar {
+  width: 27px;
+  min-width: 27px;
+  min-height: 27px;
+  height: 27px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-avatar-fallback {
+  font-size: 10px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-author-info strong {
+  font-size: 12px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-author-info span {
+  font-size: 10px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-status {
+  padding: 2px 8px;
+  font-size: 10px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-tag-link {
+  padding: 3px 8px;
+  font-size: 9px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-media {
+  width: 88%;
+  margin-top: 4px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-media-image,
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-media>video {
+  height: clamp(220px, 24.3vw, 280px);
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-caption {
+  margin: 21px 0 5px;
+  font-size: 16px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-content {
+  margin-bottom: 10px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-actions {
+  gap: 10px;
+  margin-top: 7px;
+  font-size: 13px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-card {
+  padding-top: 20px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .trending-discussions {
+  padding-bottom: 11px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .trending-discussions .section-heading {
+  margin-bottom: 3px;
+}
+
+.feed-main:not(.explore-feed-main):not(.selected-tag-main) .trending-discussion-card .discussion-tags {
+  min-height: 15px;
+}
+
+.feed-main.trending-page-main {
+  display: block;
+  padding: 22px 23px 48px 44px;
+}
+
+.trending-page-content {
+  width: min(677px, 100%);
+}
+
+.trending-page-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 18px;
+  margin-bottom: 16px;
+  color: #222;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.trending-page-breadcrumb a {
+  color: #888;
+  text-decoration: none;
+}
+
+.trending-page-breadcrumb a:hover {
+  color: #666;
+}
+
+.trending-page-breadcrumb svg {
+  width: 13px;
+  height: 13px;
+  color: #999;
+}
+
+.trending-page-main .trending-topics {
+  position: absolute;
+  top: 12px;
+  right: 23px;
+  width: 148px;
+}
+
+.trending-page-main .trending-discussions {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.trending-page-main .trending-discussions .section-heading {
+  display: none;
+}
+
+.trending-page-main .trending-discussion-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 8px;
+}
+
+.trending-page-main .trending-discussion-card,
+.trending-page-main .trending-discussion-card.discussion-card-horizontal,
+.trending-page-main .trending-discussion-card.discussion-card-vertical {
+  min-height: 129px;
+}
+
+.trending-page-main .trending-discussion-card .discussion-tags {
+  min-height: 15px;
+}
+
+@media (min-width: 801px) and (max-width: 1000px) {
+  .trending-page-content {
+    width: calc(100% - 153px);
+  }
+
+  .trending-page-main .trending-discussion-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .feed-main.trending-page-main {
+    display: block;
+    padding: 22px 14px 32px;
+  }
+
+  .trending-page-content {
+    width: 100%;
+  }
+
+  .trending-page-main .trending-topics {
+    position: static;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .trending-page-main .trending-discussion-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .feed-main.trending-page-main {
+    padding: 16px 10px 24px;
+  }
+
+  .trending-page-main .trending-discussion-list {
+    grid-template-columns: 1fr;
+  }
+
+  .feed-main:not(.explore-feed-main):not(.selected-tag-main) .post-caption {
+    font-size: 15px;
+  }
 }

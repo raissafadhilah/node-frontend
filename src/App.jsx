@@ -8,7 +8,11 @@ import {
 } from 'react-router-dom';
 
 import Home from './pages/Home';
+import Search from './pages/Search';
+import Notifications from './pages/Notifications';
+import Settings from './pages/Settings';
 import CreatePost from './pages/CreatePost';
+
 
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -19,28 +23,34 @@ import VerifyResetOtp from './pages/auth/VerifyResetOtp';
 import ResetPassword from './pages/auth/ResetPassword';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
+import Favorites from './pages/Favorites';
 
 import Logout from './pages/auth/Logout';
 
 function App() {
   return (
     <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/create-post" element={<CreatePost />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/verify-otp" element={<VerifyOtp />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/logout" element={<Logout />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/profile/edit" element={<EditProfile />} />
-      <Route path="/" element={<Home />} />
-      <Route path="/tag/:tagName" element={<Home />} /> 
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/create-post" element={<CreatePost />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/edit" element={<EditProfile />} />
+        <Route path="/tag/:tagName" element={<Home />} />
+        <Route path="/trending-discussions" element={<Home />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/explore" element={<Home />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </BrowserRouter>
   );
 }

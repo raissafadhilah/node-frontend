@@ -1,12 +1,10 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function TrendingDiscussions({
   discussions = [],
   selectedTopic = '',
+  showAll = false,
 }) {
-  const [showMore, setShowMore] = useState(false);
-
   const normalizedSelectedTopic = selectedTopic
     .replace(/^#/, '')
     .trim()
@@ -14,37 +12,39 @@ function TrendingDiscussions({
 
   const filteredDiscussions = selectedTopic
     ? discussions.filter((post) => {
-        const tags = [
-          ...(post.hashtags || []),
-          post.topic || '',
-          post.topic_name || '',
-        ].map((tag) =>
-          String(tag).replace(/^#/, '').trim().toLowerCase()
-        );
+      const tags = [
+        ...(post.hashtags || []),
+        post.topic || '',
+        post.topic_name || '',
+      ].map((tag) =>
+        String(tag).replace(/^#/, '').trim().toLowerCase()
+      );
 
-        return tags.includes(normalizedSelectedTopic);
-      })
+      return tags.includes(normalizedSelectedTopic);
+    })
     : discussions;
 
-  const visibleDiscussions = showMore
-    ? filteredDiscussions.slice(0, 6)
+  const visibleDiscussions = showAll
+    ? filteredDiscussions
     : filteredDiscussions.slice(0, 3);
 
   return (
-    <section className="trending-discussions">
-      <div className="section-heading">
-        <h2>Trending Discussions</h2>
-
-        {filteredDiscussions.length > 3 && (
-          <button
-            type="button"
+    <section
+      className={`trending-discussions ${
+        showAll ? 'trending-discussions-full' : ''
+      }`}
+    >
+      {!showAll && (
+        <div className="section-heading">
+          <h2>Trending Discussions</h2>
+          <Link
+            to="/trending-discussions"
             className="see-more-button"
-            onClick={() => setShowMore((previous) => !previous)}
           >
-            {showMore ? 'See less' : 'See more'}
-          </button>
-        )}
-      </div>
+            See more
+          </Link>
+        </div>
+      )}
 
       {selectedTopic && (
         <div className="active-topic-filter">
@@ -52,7 +52,11 @@ function TrendingDiscussions({
         </div>
       )}
 
-      <div className="trending-discussion-list">
+      <div
+        className={`trending-discussion-list ${
+          showAll ? 'trending-discussion-list-full' : ''
+        }`}
+      >
         {visibleDiscussions.length === 0 ? (
           <div className="empty-state">
             {selectedTopic
@@ -63,27 +67,50 @@ function TrendingDiscussions({
           visibleDiscussions.map((post, index) => {
             const initials = post.full_name
               ? post.full_name
-                  .split(' ')
-                  .filter(Boolean)
-                  .map((name) => name[0])
-                  .join('')
-                  .slice(0, 2)
-                  .toUpperCase()
+                .split(' ')
+                .filter(Boolean)
+                .map((name) => name[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase()
               : '?';
 
             return (
               <article
                 key={post.id}
-                className={`trending-discussion-card ${
-                  index < 3
-                    ? 'discussion-card-horizontal'
-                    : 'discussion-card-vertical'
-                }`}
+                className={`trending-discussion-card ${index < 3
+                  ? 'discussion-card-horizontal'
+                  : 'discussion-card-vertical'
+                  }`}
               >
                 <div className="discussion-user">
+
                   <div className="discussion-avatar" aria-hidden="true">
-                    {initials}
+                    {post.profile_photo ? (
+                      <img
+                        src={
+                          post.profile_photo.startsWith('http')
+                            ? post.profile_photo
+                            : `http://localhost/node/${post.profile_photo.replace(/^\/+/, '')}`
+                        }
+                        alt=""
+                        onError={(event) => {
+                          event.currentTarget.style.display = 'none';
+                          event.currentTarget.nextElementSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+
+                    <span
+                      className="discussion-avatar-fallback"
+                      style={{
+                        display: post.profile_photo ? 'none' : 'flex',
+                      }}
+                    >
+                      {initials}
+                    </span>
                   </div>
+
 
                   <div>
                     <strong>{post.full_name || 'Pengguna'}</strong>
@@ -91,7 +118,12 @@ function TrendingDiscussions({
                   </div>
                 </div>
 
-                <p className="discussion-content">{post.content}</p>
+                <p
+                  className="discussion-content"
+                  title={post.content || ''}
+                >
+                  {post.content}
+                </p>
 
                 {/* Jumlah balasan berada di atas tag */}
                 <div className="discussion-meta">

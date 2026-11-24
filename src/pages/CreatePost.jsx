@@ -209,6 +209,7 @@ function CreatePost() {
       await createPost({
         caption: title.trim(),
         content: content.trim(),
+        category,
         hashtags: tags.map((tag) => `#${tag}`).join(' '),
         media,
       });
@@ -231,12 +232,12 @@ function CreatePost() {
 
   const initials = currentUser?.full_name
     ? currentUser.full_name
-        .trim()
-        .split(/\s+/)
-        .map((name) => name[0])
-        .join('')
-        .slice(0, 2)
-        .toUpperCase()
+      .trim()
+      .split(/\s+/)
+      .map((name) => name[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase()
     : '?';
 
   const canSubmit =
@@ -248,17 +249,17 @@ function CreatePost() {
   return (
     <div className="feed-page create-post-layout">
       <header className="top-header">
-      
+
         <div className="brand">
           <Link to="/" aria-label="Kembali ke Home">
-          <img
-            src="/NodeLogo.png"
-            alt="Node logo"
-            className="brand-logo"
-          />
+            <img
+              src="/NodeLogo.png"
+              alt="Node logo"
+              className="brand-logo"
+            />
           </Link>
         </div>
-        
+
         <div className="search-bar">
           <span className="search-icon" aria-hidden="true">
             <Search size={21} strokeWidth={1.6} />
@@ -316,35 +317,70 @@ function CreatePost() {
           </Link>
 
           <div className="sidebar-section">
-  <div className="sidebar-heading">
-    <p className="sidebar-label">MAIN MENU</p>
+            <div className="sidebar-heading">
+              <p className="sidebar-label">MAIN MENU</p>
 
-    <button
-      type="button"
-      className="sidebar-toggle-button"
-      onClick={() => setSidebarOpen(false)}
-      aria-label="Sembunyikan sidebar"
-      title="Sembunyikan sidebar"
-    >
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <rect
-          x="3"
-          y="4"
-          width="18"
-          height="16"
-          rx="2"
-          stroke="currentColor"
-          strokeWidth="1.7"
-        />
-        <path
-          d="M9 4v16"
-          stroke="currentColor"
-          strokeWidth="1.7"
-        />
-      </svg>
-    </button>
-  </div>
-  </div>
+              <button
+                type="button"
+                className="sidebar-toggle-button"
+                onClick={() => setSidebarOpen(false)}
+                aria-label="Sembunyikan sidebar"
+                title="Sembunyikan sidebar"
+              >
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="16"
+                    rx="2"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                  />
+                  <path
+                    d="M9 4v16"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <button type="button" className="sidebar-item active">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1V10Z"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span>Home</span>
+            </button>
+            <button
+              type="button"
+              className="sidebar-item disabled"
+              disabled
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="6.5"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+                <path
+                  d="M16 16L21 21"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <span>Explore</span>
+            </button>
+
+          </div>
 
           <div className="sidebar-section">
             <p className="sidebar-label">SETTINGS</p>
@@ -359,34 +395,34 @@ function CreatePost() {
             </button>
           </div>
         </aside>
-          
-          
-{!sidebarOpen && (
-  <button
-    type="button"
-    className="sidebar-reopen-button"
-    onClick={() => setSidebarOpen(true)}
-    aria-label="Tampilkan sidebar"
-    title="Tampilkan sidebar"
-  >
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect
-        x="3"
-        y="4"
-        width="18"
-        height="16"
-        rx="2"
-        stroke="currentColor"
-        strokeWidth="1.7"
-      />
-      <path
-        d="M9 4v16"
-        stroke="currentColor"
-        strokeWidth="1.7"
-      />
-    </svg>
-  </button>
-)}
+
+
+        {!sidebarOpen && (
+          <button
+            type="button"
+            className="sidebar-reopen-button"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Tampilkan sidebar"
+            title="Tampilkan sidebar"
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect
+                x="3"
+                y="4"
+                width="18"
+                height="16"
+                rx="2"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+              <path
+                d="M9 4v16"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+            </svg>
+          </button>
+        )}
 
 
         <main className="create-post-main">
@@ -426,6 +462,8 @@ function CreatePost() {
                     Select category...
                   </option>
                   <option value="FICT">FICT</option>
+                  <option value="FMB">FMB</option>
+                  <option value="FHS">FHS</option>
                   <option value="Academic">Academic</option>
                   <option value="Career">Career</option>
                   <option value="Campus Life">Campus Life</option>

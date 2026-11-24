@@ -1,61 +1,40 @@
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import { logoutUser } from '../../services/api';
-import {
-  USE_MOCK_AUTH,
-  clearMockUser,
-} from '../../data/mockAuth';
+import { logoutCurrentUser } from '../../services/logout';
 
 function Logout() {
   const navigate = useNavigate();
-
+  const started = useRef(false);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  async function handleLogout() {
-    setError('');
-    setLoading(true);
+  useEffect(() => {
+    if (started.current) return;
+    started.current = true;
 
-    try {
-      if (USE_MOCK_AUTH) {
-        // Hapus status login dummy dari browser.
-        clearMockUser();
-
-        // Kembali ke Home sebagai pengunjung.
+    async function handleLogout() {
+      try {
+        await logoutCurrentUser();
         navigate('/', { replace: true });
-        return;
+      } catch (err) {
+        setError(err.message || 'Terjadi kesalahan saat logout.');
       }
-
-      // Logout API untuk digunakan ketika backend siap.
-      const result = await logoutUser();
-
-      if (result.success) {
-        navigate('/', { replace: true });
-      } else {
-        setError(result.message || 'Logout gagal.');
-      }
-    } catch (err) {
-      setError(err.message || 'Terjadi kesalahan saat logout.');
-    } finally {
-      setLoading(false);
     }
-  }
+
+    handleLogout();
+  }, [navigate]);
 
   return (
-    <div>
-      <h1>Logout Node</h1>
-
-      <button
-        onClick={handleLogout}
-        disabled={loading}
-      >
-        {loading ? 'Logout...' : 'Logout'}
-      </button>
-
-      {error && <p>{error}</p>}
-    </div>
+    <main className="logout-state">
+      {error ? (
+        <>
+          <p role="alert">{error}</p>
+          <Link to="/">Kembali ke beranda</Link>
+        </>
+      ) : (
+        <p role="status">Sedang keluar...</p>
+      )}
+    </main>
   );
 }
 

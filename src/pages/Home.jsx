@@ -1,5 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useLocation,
+} from 'react-router-dom';
+
+import Explore from './Explore';
 import { mockHome } from '../data/homeMockData';
 import { getMockUser } from '../data/mockAuth';
 
@@ -11,11 +18,15 @@ import {
 import {
   getHome,
   getCurrentUser,
+  getNotifications,
 } from '../services/api';
 
 import TrendingTopics from '../components/home/TrendingTopics';
 import TrendingDiscussions from '../components/home/TrendingDiscussions';
 import PostList from '../components/home/PostList';
+import LogoutLink from '../components/LogoutLink';
+
+
 
 function withMockPosts(homeData) {
   const posts = [
@@ -34,9 +45,19 @@ function withMockPosts(homeData) {
 
 function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isExplorePage = location.pathname === '/explore';
+  const isTrendingDiscussionsPage =
+    location.pathname === '/trending-discussions';
   const [home, setHome] = useState(null);
+
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const accountMenuRef = useRef(null);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [unreadCount, setUnreadCount] = useState(0);
   const [currentUser, setCurrentUser] = useState(
-  () => getMockUser()
+    () => getMockUser()
   );
   const [error, setError] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -45,12 +66,43 @@ function Home() {
   const selectedTopic = tagName
     ? tagName.replace(/^#/, '')
     : '';
-  
+
+  // Tutup dropdown ketika user berpindah halaman.
+  useEffect(() => {
+    setAccountMenuOpen(false);
+  }, [location.pathname]);
+
+  // Tutup dropdown ketika klik di luar menu atau tekan Escape.
+  useEffect(() => {
+    function handleOutsideClick(event) {
+      if (
+        accountMenuRef.current &&
+        !accountMenuRef.current.contains(event.target)
+      ) {
+        setAccountMenuOpen(false);
+      }
+    }
+
+    function handleEscape(event) {
+      if (event.key === 'Escape') {
+        setAccountMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, []);
+
   useEffect(() => {
     async function loadHome() {
       try {
         const [homeResult, userResult] = await Promise.all([
-          getHome(),
+          getHome(isTrendingDiscussionsPage ? 8 : 3),
           getCurrentUser(),
         ]);
 
@@ -62,11 +114,10 @@ function Home() {
         }
 
         if (userResult.success) {
-  setCurrentUser(userResult.data);
-} else {
-  setCurrentUser(getMockUser());
-}
-
+          setCurrentUser(userResult.data);
+        } else {
+          setCurrentUser(getMockUser());
+        }
       } catch (err) {
         console.warn(
           'Backend belum tersedia. Menggunakan data dummy untuk frontend.',
@@ -74,12 +125,47 @@ function Home() {
         );
 
         setHome(withMockPosts(mockHome));
-setCurrentUser(getMockUser());
-setError('');
+        setCurrentUser(getMockUser());
+        setError('');
       }
     }
 
     loadHome();
+  }, [isTrendingDiscussionsPage]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchUnreadNotifications = async () => {
+      try {
+        const result = await getNotifications();
+
+        console.log('HASIL API NOTIFIKASI:', result);
+
+        if (isMounted) {
+          setUnreadCount(
+            Number(result.data?.unread_count || 0)
+          );
+        }
+      } catch (err) {
+        console.error(
+          'Gagal mengambil jumlah notifikasi:',
+          err
+        );
+      }
+    };
+
+    fetchUnreadNotifications();
+
+    const intervalId = setInterval(
+      fetchUnreadNotifications,
+      30000
+    );
+
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
   }, []);
 
   function handlePostDeleted(postId) {
@@ -101,7 +187,9 @@ setError('');
       return;
     }
 
-    navigate(`/tag/${encodeURIComponent(topic.replace(/^#/, ''))}`);
+    navigate(
+      `/tag/${encodeURIComponent(topic.replace(/^#/, ''))}`
+    );
   }
 
   function handlePostUpdated(postId, updatedContent) {
@@ -136,57 +224,68 @@ setError('');
       </main>
     );
   }
-
   return (
     <div className="feed-page">
       <header className="top-header">
 
         <div className="brand">
           <Link to="/" aria-label="Kembali ke Home">
-          <img
-            src="/NodeLogo.png"
-            alt="Node logo"
-            className="brand-logo"
-          />
+            <img
+              src="/NodeLogo.png"
+              alt="Node logo"
+              className="brand-logo"
+            />
           </Link>
         </div>
 
-        <div className="search-bar">
-          <span className="search-icon">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                cx="11"
-                cy="11"
-                r="6.5"
-                stroke="currentColor"
-                strokeWidth="1.8"
-              />
-              <path
-                d="M16 16L21 21"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
-            </svg>
-          </span>
 
+
+        <div className="search-bar">
+          <svg
+            className="search-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle
+              cx="10.8"
+              cy="10.8"
+              r="6.8"
+              stroke="currentColor"
+              strokeWidth="1.7"
+            />
+            <path
+              d="m16 16 4.5 4.5"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+            />
+          </svg>
           <input
             type="text"
             placeholder="What are you curious about today?"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault();
+
+                const keyword = searchQuery.trim();
+
+                if (keyword) {
+                  navigate(`/search?q=${encodeURIComponent(keyword)}`);
+                }
+              }
+            }}
           />
         </div>
 
         <div className="header-actions">
-          <button
-            type="button"
+          <Link
+            to="/notifications"
             className="notification-button"
             aria-label="Notifications"
+            title="Notifications"
           >
             <svg
               width="20"
@@ -209,32 +308,116 @@ setError('');
                 strokeLinecap="round"
               />
             </svg>
-          </button>
+            {unreadCount > 0 && (
+              <span className="notification-badge">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
+          </Link>
+
 
           {currentUser ? (
-            <Link to="/profile" className="header-user">
-              <div className="header-user-avatar">
-                {currentUser.profile_photo ? (
-                  <img
-                    src={`http://localhost/node/${currentUser.profile_photo}`}
-                    alt={`${currentUser.full_name} profile`}
-                  />
-                ) : (
-                  currentUser.full_name
-                    ? currentUser.full_name
+            <div className="header-account" ref={accountMenuRef}>
+
+              <button
+                type="button"
+                className="header-user"
+                onClick={() => setAccountMenuOpen((prev) => !prev)}
+                aria-expanded={accountMenuOpen}
+                aria-haspopup="true"
+                aria-label="Buka menu akun"
+              >
+                <div className="header-user-avatar">
+                  {currentUser.profile_photo ? (
+                    <img
+                      src={`http://localhost/node/${currentUser.profile_photo}`}
+                      alt={`${currentUser.full_name} profile`}
+                    />
+                  ) : (
+                    currentUser.full_name
+                      ? currentUser.full_name
                         .split(' ')
                         .map((name) => name[0])
                         .join('')
                         .slice(0, 2)
                         .toUpperCase()
-                    : '?'
-                )}
-              </div>
+                      : '?'
+                  )}
+                </div>
+                <span className="header-user-name">
+                  {currentUser.full_name || 'Node User'}
+                </span>
+              </button>
 
-              <span className="header-user-name">
-  {currentUser.nickname || currentUser.full_name}
-</span>
-            </Link>
+              {accountMenuOpen && (
+                <div className="account-dropdown">
+                  <div className="account-dropdown-header">
+                    <div className="account-dropdown-avatar">
+                      {currentUser.profile_photo ? (
+                        <img
+                          src={`http://localhost/node/${currentUser.profile_photo}`}
+                          alt={`${currentUser.full_name} profile`}
+                        />
+                      ) : (
+                        currentUser.full_name
+                          ? currentUser.full_name
+                            .split(' ')
+                            .map((name) => name[0])
+                            .join('')
+                            .slice(0, 2)
+                            .toUpperCase()
+                          : '?'
+                      )}
+                    </div>
+
+                    <div className="account-dropdown-info">
+                      <strong>{currentUser.full_name || 'Node User'}</strong>
+                      {currentUser.email && (
+                        <span>{currentUser.email}</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="account-dropdown-divider" />
+
+                  <Link
+                    to="/profile"
+                    className="account-dropdown-item"
+                    onClick={() => setAccountMenuOpen(false)}
+                  >
+                    <span>👤</span>
+                    <span>Profile</span>
+                  </Link>
+
+                  <Link
+                    to="/settings"
+                    className="account-dropdown-item"
+                    onClick={() => setAccountMenuOpen(false)}
+                  >
+                    <span>⚙️</span>
+                    <span>Settings</span>
+                  </Link>
+
+                  <Link
+                    to="/favorites"
+                    className="account-dropdown-item"
+                    onClick={() => setAccountMenuOpen(false)}
+                  >
+                    <span>♡</span>
+                    <span>Favorites</span>
+                  </Link>
+
+                  <div className="account-dropdown-divider" />
+
+                  <LogoutLink
+                    className="account-dropdown-item account-logout"
+                    onClick={() => setAccountMenuOpen(false)}
+                  >
+                    <span>↪</span>
+                    <span>Logout</span>
+                  </LogoutLink>
+                </div>
+              )}
+            </div>
           ) : (
             <Link to="/login" className="signup-button">
               Sign up
@@ -243,7 +426,7 @@ setError('');
         </div>
       </header>
 
-      <div className={`feed-layout ${sidebarOpen ? '' : 'sidebar-collapsed'}`}> 
+      <div className={`feed-layout ${sidebarOpen ? '' : 'sidebar-collapsed'} ${selectedTopic ? 'has-selected-tag' : ''}`}>
         {/* Ini memberi CSS penanda saat sidebar ditutup, sehingga ruang untuk tombol dapat disediakan tanpa menindih konten.  */}
         <aside
           className={`sidebar ${sidebarOpen ? '' : 'sidebar-hidden'}`}
@@ -305,7 +488,16 @@ setError('');
               </button>
             </div>
 
-            <button type="button" className="sidebar-item active">
+            <Link
+              to="/"
+              className={`sidebar-item ${
+                !isExplorePage &&
+                !selectedTopic &&
+                !isTrendingDiscussionsPage
+                  ? 'active'
+                  : ''
+              }`}
+            >
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                   d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1V10Z"
@@ -315,12 +507,11 @@ setError('');
                 />
               </svg>
               <span>Home</span>
-            </button>
+            </Link>
 
-            <button
-              type="button"
-              className="sidebar-item disabled"
-              disabled
+            <Link
+              to="/explore"
+              className={`sidebar-item ${isExplorePage ? 'active' : ''}`}
             >
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <circle
@@ -338,32 +529,11 @@ setError('');
                 />
               </svg>
               <span>Explore</span>
-            </button>
+            </Link>
           </div>
 
           <div className="sidebar-section">
-            <p className="sidebar-label">SETTINGS</p>
-
-            <button
-              type="button"
-              className="sidebar-item disabled"
-              disabled
-            >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                />
-                <path
-                  d="m19.4 15 .1.1a1.8 1.8 0 1 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3 .9v.2a1.8 1.8 0 1 1-3.6 0v-.2a1.8 1.8 0 0 0-3-.9l-.1.1a1.8 1.8 0 1 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-.9-3h-.2a1.8 1.8 0 1 1 0-3.6h.2a1.8 1.8 0 0 0 .9-3l-.1-.1a1.8 1.8 0 1 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3-.9v-.2a1.8 1.8 0 1 1 3.6 0v.2a1.8 1.8 0 0 0 3 .9l.1-.1a1.8 1.8 0 1 1 2.5 2.5l-.1.1a1.8 1.8 0 0 0 .9 3h.2a1.8 1.8 0 1 1 0 3.6h-.2a1.8 1.8 0 0 0-.9 3Z"
-                  stroke="currentColor"
-                  strokeWidth="1.3"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span>Settings</span>
-            </button>
+  
           </div>
         </aside>
 
@@ -398,59 +568,103 @@ setError('');
           </button>
         )}
 
-        
-<main className={`feed-main ${selectedTopic ? 'selected-tag-main' : ''}`}>
-  {selectedTopic ? (
-    <section className="selected-tag-page">
-      <nav className="tag-breadcrumb" aria-label="Breadcrumb">
-        <Link to="/">Home</Link>
-        <span aria-hidden="true">&gt;</span>
-        <span>{selectedTopic}</span>
-      </nav>
 
-      <h1>#{selectedTopic}</h1>
 
-      <PostList
-        posts={(home.posts || []).filter((post) => {
-          const tags = [
-            ...(post.hashtags || []),
-            post.topic || '',
-            post.topic_name || '',
-          ].map((tag) =>
-            String(tag).replace(/^#/, '').trim().toLowerCase()
-          );
+        <main className={`feed-main ${isExplorePage ? 'explore-feed-main' : ''} ${selectedTopic ? 'selected-tag-main' : ''} ${isTrendingDiscussionsPage ? 'trending-page-main' : ''}`}>
 
-          return tags.includes(selectedTopic.trim().toLowerCase());
-        })}
-        currentUser={currentUser}
-        onRequireLogin={() => navigate('/login')}
-        onPostDeleted={handlePostDeleted}
-        onPostUpdated={handlePostUpdated}
-      />
-    </section>
-  ) : (
-    <>
-      <TrendingDiscussions
-        discussions={home?.trending_discussions || []}
-        selectedTopic={selectedTopic}
-      />
+          {isTrendingDiscussionsPage ? (
+            <>
+              <section className="trending-page-content">
+                <nav
+                  className="trending-page-breadcrumb"
+                  aria-label="Breadcrumb"
+                >
+                  <Link to="/">Home</Link>
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="m9 18 6-6-6-6"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <span>Trending Discussions</span>
+                </nav>
 
-      <TrendingTopics
-        topics={home?.trending_topics || []}
-        selectedTopic={selectedTopic}
-      />
+                <TrendingDiscussions
+                  discussions={home?.trending_discussions || []}
+                  showAll
+                />
+              </section>
 
-      <PostList
-        posts={home.posts}
-        currentUser={currentUser}
-        onRequireLogin={() => navigate('/login')}
-        onPostDeleted={handlePostDeleted}
-        onPostUpdated={handlePostUpdated}
-      />
-    </>
-  )}
-</main>
+              <TrendingTopics topics={home?.trending_topics || []} />
+            </>
+          ) : isExplorePage ? (
+            <Explore />
+          ) : selectedTopic ? (
+            <>
+              <section className="selected-tag-page">
+                <nav className="tag-breadcrumb" aria-label="Breadcrumb">
+                  <Link to="/">Home</Link>
+                  <span aria-hidden="true">&gt;</span>
+                  <span>#{selectedTopic}</span>
+                </nav>
 
+                <h1>#{selectedTopic}</h1>
+
+                <PostList
+                  posts={(home.posts || []).filter((post) => {
+                    const tags = [
+                      ...(post.hashtags || []),
+                      post.topic || '',
+                      post.topic_name || '',
+                    ].map((tag) =>
+                      String(tag)
+                        .replace(/^#/, '')
+                        .trim()
+                        .toLowerCase()
+                    );
+
+                    return tags.includes(
+                      selectedTopic.trim().toLowerCase()
+                    );
+                  })}
+                  currentUser={currentUser}
+                  onRequireLogin={() => navigate('/login')}
+                  onPostDeleted={handlePostDeleted}
+                  onPostUpdated={handlePostUpdated}
+                />
+              </section>
+
+              <TrendingTopics
+                topics={home?.trending_topics || []}
+                selectedTopic={selectedTopic}
+              />
+            </>
+          ) : (
+            <>
+              <TrendingDiscussions
+                discussions={home?.trending_discussions || []}
+                selectedTopic={selectedTopic}
+              />
+
+              <TrendingTopics
+                topics={home?.trending_topics || []}
+                selectedTopic={selectedTopic}
+              />
+
+              <PostList
+                posts={home.posts}
+                currentUser={currentUser}
+                onRequireLogin={() => navigate('/login')}
+                onPostDeleted={handlePostDeleted}
+                onPostUpdated={handlePostUpdated}
+              />
+            </>
+          )}
+
+        </main>
       </div>
     </div>
   );

@@ -1,12 +1,8 @@
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../services/api';
 import './Login.css';
-import {
-  USE_MOCK_AUTH,
-  setMockUser,
-  findMockAccount,
-} from '../../data/mockAuth';
 
 function Login() {
   const navigate = useNavigate();
@@ -32,91 +28,46 @@ function Login() {
     setError('');
     setSuccess('');
   }
-  // DIBAWAH INI KETIKA PAKE API/DATABASE
-  // async function handleSubmit(event) {
-  //   event.preventDefault();
 
-  //   setError('');
-  //   setSuccess('');
-  //   setLoading(true);
+  async function handleSubmit(event) {
+    event.preventDefault();
 
-  //   try {
-  //     const result = await loginUser(form);
+    setError('');
+    setSuccess('');
+    setLoading(true);
 
-  //     if (result.success) {
-  //       setSuccess(result.message || 'Login berhasil.');
+    try {
+      const result = await loginUser({
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
+      });
 
-  //       setTimeout(() => {
-  //         navigate('/');
-  //       }, 500);
-  //     } else {
-  //       setError(result.message || 'Login gagal.');
-  //     }
-  //   } catch (err) {
-  //     setError(
-  //       err.message || 'Terjadi kesalahan saat login.'
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-  
-async function handleSubmit(event) {
-  event.preventDefault();
+      if (!result.success) {
+        setError(result.message || 'Login gagal.');
+        return;
+      }
 
-  setError('');
-  setSuccess('');
-  setLoading(true);
+      const role = result.data?.role;
 
-  try {
-    if (USE_MOCK_AUTH) {
-      const email = form.email.trim().toLowerCase();
-
-      // Cari akun dummy yang sebelumnya didaftarkan.
-      const account = findMockAccount(email);
-
-      // Jika belum terdaftar, buat profil dummy
-      // berdasarkan email untuk pengujian frontend.
-      const user = account || {
-        id: 'mock-user',
-        full_name: email.split('@')[0],
-        nickname: email.split('@')[0],
-        email,
-        status: 'mahasiswa',
-        profile_photo: null,
-      };
-
-      setMockUser(user);
-
-      setSuccess('Login dummy berhasil.');
-
-      setTimeout(() => {
-        navigate('/');
-      }, 500);
-
-      return;
-    }
-
-    // Digunakan kembali saat backend sudah siap.
-    const result = await loginUser(form);
-
-    if (result.success) {
       setSuccess(result.message || 'Login berhasil.');
 
       setTimeout(() => {
-        navigate('/');
+        if (role === 'admin') {
+          window.location.href =
+            'http://localhost/node/admin/dashboard.php';
+        } else {
+          navigate('/');
+        }
       }, 500);
-    } else {
-      setError(result.message || 'Login gagal.');
+
+    } catch (err) {
+      setError(
+        err.message || 'Terjadi kesalahan saat login.'
+      );
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    setError(
-      err.message || 'Terjadi kesalahan saat login.'
-    );
-  } finally {
-    setLoading(false);
   }
-}
 
   return (
     <main className="auth-page">
@@ -126,12 +77,12 @@ async function handleSubmit(event) {
 
         {/* BRAND */}
         <div className="auth-brand">
-  <img
-    src="/NodeLogo.png"
-    alt="Node"
-    className="auth-brand-Logo"
-  />
-</div>
+          <img
+            src="/NodeLogo.png"
+            alt="Node"
+            className="auth-brand-Logo"
+          />
+        </div>
 
         {/* FORM AREA */}
         <div className="auth-content">
@@ -196,9 +147,7 @@ async function handleSubmit(event) {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(event) =>
-                    setRememberMe(
-                      event.target.checked
-                    )
+                    setRememberMe(event.target.checked)
                   }
                 />
 
@@ -236,9 +185,7 @@ async function handleSubmit(event) {
               className="auth-submit"
               disabled={loading}
             >
-              {loading
-                ? 'Signing in...'
-                : 'Sign in'}
+              {loading ? 'Signing in...' : 'Sign in'}
             </button>
 
           </form>
@@ -265,13 +212,11 @@ async function handleSubmit(event) {
       <section className="auth-image-panel">
 
         <div className="auth-image-wrapper">
-
           <img
             src="/node-auth-image.png"
             alt="Node community"
             className="auth-image"
           />
-
         </div>
 
       </section>

@@ -1,27 +1,85 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 
-import { verifyResetOtp } from '../../services/api';
+import { useState, useRef } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Mail } from 'lucide-react';
+
+import {
+  verifyResetOtp,
+  forgotPassword
+} from '../../services/api';
 
 import './VerifyResetOtp.css';
 
 function VerifyResetOtp() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [otp, setOtp] = useState('');
+  const email = location.state?.email || '';
 
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
 
-  function handleOtpChange(event) {
-    const value = event.target.value
+  const inputRefs = useRef([]);
+
+  function handleOtpChange(index, value) {
+    const digit = value.replace(/\D/g, '').slice(-1);
+
+    const newOtp = [...otp];
+    newOtp[index] = digit;
+
+    setOtp(newOtp);
+    setError('');
+    setSuccess('');
+
+    if (digit && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  }
+
+  function handleKeyDown(index, event) {
+    if (
+      event.key === 'Backspace' &&
+      !otp[index] &&
+      index > 0
+    ) {
+      inputRefs.current[index - 1]?.focus();
+    }
+
+    if (event.key === 'ArrowLeft' && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+
+    if (event.key === 'ArrowRight' && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  }
+
+  function handlePaste(event) {
+    event.preventDefault();
+
+    const pasted = event.clipboardData
+      .getData('text')
       .replace(/\D/g, '')
       .slice(0, 6);
 
-    setOtp(value);
+    if (!pasted) return;
+
+    const newOtp = Array(6).fill('');
+
+    pasted.split('').forEach((digit, index) => {
+      newOtp[index] = digit;
+    });
+
+    setOtp(newOtp);
     setError('');
     setSuccess('');
+
+    inputRefs.current[
+      Math.min(pasted.length, 6) - 1
+    ]?.focus();
   }
 
   async function handleSubmit(event) {
@@ -30,20 +88,21 @@ function VerifyResetOtp() {
     setError('');
     setSuccess('');
 
-    if (!/^\d{6}$/.test(otp)) {
-      setError('OTP harus terdiri dari 6 digit angka.');
+    const otpValue = otp.join('');
+
+    if (!/^\d{6}$/.test(otpValue)) {
+      setError('Please enter the complete 6-digit code.');
       return;
     }
 
     setLoading(true);
 
     try {
-      const result = await verifyResetOtp(otp);
+      const result = await verifyResetOtp(otpValue);
 
       if (result.success) {
         setSuccess(
-          result.message ||
-            'OTP berhasil diverifikasi.'
+          result.message || 'OTP successfully verified.'
         );
 
         setTimeout(() => {
@@ -51,133 +110,145 @@ function VerifyResetOtp() {
         }, 700);
       } else {
         setError(
-          result.message ||
-            'Verifikasi OTP gagal.'
+          result.message || 'OTP verification failed.'
         );
       }
     } catch (err) {
       setError(
-        err.message ||
-          'Terjadi kesalahan saat verifikasi OTP.'
+        err.message || 'Something went wrong. Please try again.'
       );
     } finally {
       setLoading(false);
     }
   }
 
+  async function handleResend() {
+    if (!email || resending || loading) return;
+
+    setError('');
+    setSuccess('');
+    setResending(true);
+
+    try {
+      const result = await forgotPassword(email);
+
+      if (result.success) {
+        setSuccess(
+          result.message || 'A new verification code has been sent.'
+        );
+        setOtp(['', '', '', '', '', '']);
+        inputRefs.current[0]?.focus();
+      } else {
+        setError(
+          result.message || 'Unable to resend verification code.'
+        );
+      }
+    } catch (err) {
+      setError(
+        err.message || 'Unable to resend verification code.'
+      );
+    } finally {
+      setResending(false);
+    }
+  }
+
   return (
-    <main className="auth-page">
+    <main className="verify-page">
 
-      {/* LEFT PANEL */}
-      <section className="auth-panel">
+      <section className="verify-container">
 
-        {/* BRAND */}
-        <div className="auth-brand">
-          <img
-            src="/node-logo.png"
-            alt="Node logo"
-            className="auth-brand-logo"
-          />
-
-          <span className="auth-brand-name">
-            node
-          </span>
+        {/* ICON */}
+        <div className="verify-icon">
+          <Mail size={29} strokeWidth={1.8} />
         </div>
 
-        {/* CONTENT */}
-        <div className="auth-content">
+        {/* HEADING */}
+        <div className="verify-heading">
+          <h1>Check your email</h1>
 
-          <div className="auth-heading">
-            <h1>
-              Verify your code.
-            </h1>
+          <p>
+            Input the code that was sent to{' '}
+            <span>
+              {email || 'your email'}
+            </span>
+          </p>
+        </div>
 
-            <p>
-              Enter the 6-digit verification code
-              we sent to your email to continue
-              resetting your password.
-            </p>
-          </div>
+        {/* FORM */}
+        <form
+          className="verify-form"
+          onSubmit={handleSubmit}
+        >
 
-          <form
-            className="auth-form"
-            onSubmit={handleSubmit}
-          >
-
-            {/* OTP */}
-            <div className="auth-field">
-              <label htmlFor="otp">
-                Verification code
-              </label>
-
+          {/* OTP INPUTS */}
+          <div className="otp-container">
+            {otp.map((digit, index) => (
               <input
+                key={index}
+                ref={(element) => {
+                  inputRefs.current[index] = element;
+                }}
                 type="text"
-                id="otp"
-                value={otp}
-                onChange={handleOtpChange}
-                placeholder="Enter 6-digit code..."
                 inputMode="numeric"
-                autoComplete="one-time-code"
-                maxLength={6}
-                pattern="[0-9]{6}"
+                autoComplete={
+                  index === 0 ? 'one-time-code' : 'off'
+                }
+                maxLength={1}
+                value={digit}
+                onChange={(event) =>
+                  handleOtpChange(index, event.target.value)
+                }
+                onKeyDown={(event) =>
+                  handleKeyDown(index, event)
+                }
+                onPaste={handlePaste}
+                aria-label={`Verification digit ${index + 1}`}
                 required
               />
+            ))}
+          </div>
+
+          {/* MESSAGE */}
+          {error && (
+            <div className="verify-message verify-error">
+              {error}
             </div>
+          )}
 
-            {/* MESSAGE */}
-            {error && (
-              <div className="auth-message auth-message-error">
-                {error}
-              </div>
-            )}
+          {success && (
+            <div className="verify-message verify-success">
+              {success}
+            </div>
+          )}
 
-            {success && (
-              <div className="auth-message auth-message-success">
-                {success}
-              </div>
-            )}
+          {/* SUBMIT */}
+          <button
+            type="submit"
+            className="verify-submit"
+            disabled={loading || resending}
+          >
+            {loading ? 'Verifying...' : 'Verify & Continue'}
+          </button>
 
-            {/* SUBMIT */}
-            <button
-              type="submit"
-              className="auth-submit"
-              disabled={loading}
-            >
-              {loading
-                ? 'Verifying...'
-                : 'Verify code'}
-            </button>
+        </form>
 
-          </form>
+        {/* RESEND */}
+        <p className="verify-resend">
+          Didn't receive the code?
 
-          {/* BACK TO LOGIN */}
-          <p className="auth-register">
-            Remember your password?
+          <button
+            type="button"
+            onClick={handleResend}
+            disabled={!email || resending || loading}
+          >
+            {resending ? 'Sending...' : 'Resend Code'}
+          </button>
+        </p>
 
-            <Link to="/login">
-              Sign in
-            </Link>
-          </p>
-
-        </div>
-
-        {/* FOOTER */}
-        <footer className="auth-footer">
-          © 2026 node. All Rights Reserved.
-        </footer>
-
-      </section>
-
-      {/* RIGHT IMAGE */}
-      <section className="auth-image-panel">
-
-        <div className="auth-image-wrapper">
-          <img
-            src="/node-auth-image.png"
-            alt="Node community"
-            className="auth-image"
-          />
-        </div>
+        {/* BACK TO LOGIN */}
+        <Link to="/login" className="verify-back">
+          <span>←</span> Back to log in
+        </Link>
 
       </section>
 

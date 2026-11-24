@@ -1,0 +1,269 @@
+
+/* =========================================
+   NODE SEARCH PAGE
+   Layout mengikuti halaman hashtag
+========================================= */
+
+.feed-main.search-page-main {
+  grid-template-columns: minmax(0, 1fr) 148px;
+  grid-template-areas: "search-results topics";
+  align-items: start;
+  column-gap: 5px;
+  min-width: 0;
+}
+
+.search-results-page {
+  grid-area: search-results;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.search-topics-panel {
+  grid-area: topics;
+  width: 100%;
+  min-width: 0;
+}
+
+/* =========================================
+   BREADCRUMB
+========================================= */
+
+.search-results-page .tag-breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  margin: 0 0 17px;
+  padding: 0;
+  color: #888888;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: left;
+}
+
+/* Home: abu-abu seperti desain referensi */
+.search-results-page .tag-breadcrumb a {
+  color: #888888 !important;
+  text-decoration: none;
+}
+
+.search-results-page .tag-breadcrumb a:hover {
+  color: #666666 !important;
+  text-decoration: none;
+}
+
+/* Separator breadcrumb */
+.search-results-page .tag-breadcrumb span {
+  color: #888888;
+}
+
+/* Search: hitam */
+.search-results-page .tag-breadcrumb span:last-child {
+  color: #222222;
+}
+
+/* =========================================
+   PAGE TITLE
+========================================= */
+
+.search-results-page > h1 {
+  margin: 0 0 14px;
+  padding: 0 0 16px;
+  border-bottom: 1px solid #d6d6d6;
+  color: #222222;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.search-query-label {
+  margin: 0 0 20px;
+  color: #888888;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.search-query-label strong {
+  color: #222222;
+  font-weight: 600;
+}
+
+/* =========================================
+   SECTION AKUN & POSTINGAN
+========================================= */
+
+.search-results-page .search-section {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.search-results-page .search-section h2 {
+  margin: 0 0 16px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #d6d6d6;
+  color: #222222;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* =========================================
+   ACCOUNT RESULTS
+========================================= */
+
+.search-user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+.search-user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding: 14px 18px;
+  border: 1px solid #eeeeee;
+  border-radius: 10px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.search-user-avatar {
+  display: flex;
+  flex: 0 0 44px;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #f7e8e9;
+  color: #a90000;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.search-user-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.search-user-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.search-user-info strong {
+  color: #222222;
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.search-user-info span {
+  color: #999999;
+  font-size: 12px;
+}
+
+/* =========================================
+   POST RESULTS
+   Lebar dan jarak mengikuti kolom hashtag
+========================================= */
+
+.search-results-page .post-list {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.search-results-page .post-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.search-results-page .post-list-items > * {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+}
+
+/* Pesan status hanya untuk loading/error */
+.search-state {
+  margin: 12px 0;
+  color: #888888;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.search-error {
+  color: #a90000;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+  .search-results-page {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 800px) {
+  .feed-main.search-page-main {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "search-results"
+      "topics";
+    row-gap: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .search-results-page > h1 {
+    font-size: 25px;
+  }
+
+  .search-results-page .tag-breadcrumb {
+    margin-bottom: 22px;
+  }
+
+  .search-user-card {
+    padding: 12px;
+  }
+}

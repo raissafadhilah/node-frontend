@@ -1,7 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import {
+  Bell,
+  ChevronRight,
+  Compass,
+  Home,
+  PanelLeft,
+  Plus,
+  Search,
+} from 'lucide-react';
 
 import {
+  getCurrentUser,
+  getNotifications,
   getProfile,
   updateProfile,
   requestEmailChange,
@@ -11,10 +22,16 @@ import {
 
 import './EditProfile.css';
 
+const BACKEND_BASE_URL = 'http://localhost/node';
+
 function EditProfile() {
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const [fullName, setFullName] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -70,6 +87,68 @@ function EditProfile() {
 
     loadProfile();
   }, []);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadHeaderData() {
+      try {
+        const userResult = await getCurrentUser();
+
+        if (!mounted) return;
+
+        if (userResult.success) {
+          setCurrentUser(userResult.data);
+        }
+
+        const notificationResult = await getNotifications();
+
+        if (!mounted) return;
+
+        setUnreadCount(
+          Number(notificationResult.data?.unread_count || 0)
+        );
+      } catch (err) {
+        console.error('Gagal memuat informasi header:', err);
+      }
+    }
+
+    loadHeaderData();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  function getPhotoUrl(photoPath) {
+    if (!photoPath) return null;
+    if (/^https?:\/\//i.test(photoPath)) return photoPath;
+
+    return `${BACKEND_BASE_URL}/${photoPath.replace(/^\/+/, '')}`;
+  }
+
+  function getInitials(fullName) {
+    if (!fullName) return '?';
+
+    return fullName
+      .trim()
+      .split(/\s+/)
+      .map((part) => part[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase();
+  }
+
+  function handleSearch(event) {
+    if (event.key !== 'Enter') return;
+
+    event.preventDefault();
+    const keyword = searchQuery.trim();
+
+    if (keyword) {
+      navigate(`/search?q=${encodeURIComponent(keyword)}`);
+    }
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -310,70 +389,157 @@ function EditProfile() {
     }
 
 
-  if (loading) {
-    return (
-      <main className="edit-profile-state">
-        <h1>Node</h1>
-        <p>Loading profile...</p>
-      </main>
-    );
-  }
-
-  if (error && !profile) {
-    return (
-      <main className="edit-profile-state">
-        <h1>Edit Profile</h1>
-        <p>{error}</p>
-
-        <Link
-          to="/profile"
-          className="edit-profile-back"
-        >
-          Back to Profile
-        </Link>
-      </main>
-    );
-  }
-
   const currentEmail = profile?.user?.email || '';
+  const headerPhoto = getPhotoUrl(currentUser?.profile_photo);
 
   return (
-    <main className="edit-profile-page">
+    <div className="feed-page edit-profile-page">
+      <header className="top-header">
+        <div className="brand">
+          <Link to="/" aria-label="Kembali ke Home">
+            <img
+              src="/NodeLogo.png"
+              alt="Node logo"
+              className="brand-logo"
+            />
+          </Link>
+        </div>
 
-      <header className="edit-profile-header">
-        <Link
-          to="/"
-          className="edit-profile-brand"
-        >
-          <img
-            src="/node-logo.png"
-            alt="Node logo"
+        <div className="search-bar">
+          <span className="search-icon" aria-hidden="true">
+            <Search />
+          </span>
+          <input
+            type="text"
+            placeholder="What are you curious about today?"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            onKeyDown={handleSearch}
           />
+        </div>
 
-          <span>node</span>
-        </Link>
+        <div className="header-actions">
+          <Link
+            to="/notifications"
+            className="notification-button"
+            aria-label="Notifications"
+            title="Notifications"
+          >
+            <Bell aria-hidden="true" />
+            {unreadCount > 0 && (
+              <span className="notification-badge">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
+          </Link>
 
-        <Link
-          to="/profile"
-          className="edit-profile-back"
-        >
-          Back to Profile
-        </Link>
+          {currentUser ? (
+            <Link
+              to="/profile"
+              className="edit-profile-header-account"
+              aria-label={`Profile ${currentUser.full_name || ''}`}
+            >
+              <span className="header-user-avatar">
+                {headerPhoto ? (
+                  <img
+                    src={headerPhoto}
+                    alt={`${currentUser.full_name} profile`}
+                  />
+                ) : (
+                  getInitials(currentUser.full_name)
+                )}
+              </span>
+              <span className="edit-profile-header-name">
+                {currentUser.full_name || 'Node User'}
+              </span>
+            </Link>
+          ) : (
+            <Link to="/login" className="signup-button">
+              Sign up
+            </Link>
+          )}
+        </div>
       </header>
 
-      <section className="edit-profile-container">
+      <div className={`feed-layout edit-profile-feed-layout ${sidebarOpen ? '' : 'sidebar-collapsed'}`}>
+        <aside className={`sidebar ${sidebarOpen ? '' : 'sidebar-hidden'}`}>
+          <Link to="/create-post" className="ask-post-button">
+            <span className="ask-post-icon" aria-hidden="true">
+              <Plus />
+            </span>
+            <span>Ask / Post</span>
+          </Link>
 
-        <div className="edit-profile-card">
+          <div className="sidebar-section">
+            <div className="sidebar-heading">
+              <p className="sidebar-label">MAIN MENU</p>
+              <button
+                type="button"
+                className="sidebar-toggle-button"
+                onClick={() => setSidebarOpen(false)}
+                aria-label="Sembunyikan sidebar"
+                title="Sembunyikan sidebar"
+              >
+                <PanelLeft aria-hidden="true" />
+              </button>
+            </div>
+
+            <Link to="/" className="sidebar-item">
+              <Home aria-hidden="true" />
+              <span>Home</span>
+            </Link>
+
+            <Link to="/explore" className="sidebar-item">
+              <Compass aria-hidden="true" />
+              <span>Explore</span>
+            </Link>
+          </div>
+        </aside>
+
+        {!sidebarOpen && (
+          <button
+            type="button"
+            className="sidebar-reopen-button"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Tampilkan sidebar"
+            title="Tampilkan sidebar"
+          >
+            <PanelLeft aria-hidden="true" />
+          </button>
+        )}
+
+        <main className="feed-main edit-profile-feed-main">
+          <div className="edit-profile-workspace">
+            <nav className="edit-profile-breadcrumb" aria-label="Breadcrumb">
+              <Link to="/">Node</Link>
+              <ChevronRight aria-hidden="true" />
+              <span>Edit profile</span>
+            </nav>
+
+            {loading ? (
+              <div className="edit-profile-state">
+                <p>Loading profile...</p>
+              </div>
+            ) : error && !profile ? (
+              <div className="edit-profile-card edit-profile-state">
+                <h1>Could not load your profile</h1>
+                <p>{error}</p>
+                <Link to="/profile" className="edit-profile-back">
+                  Back to Profile
+                </Link>
+              </div>
+            ) : (
+              <div className="edit-profile-card">
 
           <div className="edit-profile-heading">
-            <p>Edit Profile</p>
+            <p>Profile settings</p>
 
             <h1>
-              Personal information
+              Edit your profile
             </h1>
 
             <span>
-              Update your profile information and account settings.
+              Keep your personal information and account details up to date.
             </span>
           </div>
 
@@ -761,11 +927,12 @@ function EditProfile() {
                 )}
           </section>
 
-        </div>
-
-      </section>
-
-    </main>
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+    </div>
   );
 }
 

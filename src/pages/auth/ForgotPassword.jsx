@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -9,7 +10,6 @@ function ForgotPassword() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
-
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,12 +28,14 @@ function ForgotPassword() {
     setLoading(true);
 
     try {
-      const result = await forgotPassword(email);
+      const result = await forgotPassword(
+        email.trim().toLowerCase()
+      );
 
       if (result.success) {
         setSuccess(
           result.message ||
-            'OTP reset password berhasil dikirim.'
+          'OTP reset password berhasil dikirim.'
         );
 
         setTimeout(() => {
@@ -42,13 +44,13 @@ function ForgotPassword() {
       } else {
         setError(
           result.message ||
-            'Gagal mengirim OTP reset password.'
+          'Gagal mengirim OTP reset password.'
         );
       }
     } catch (err) {
       setError(
         err.message ||
-          'Terjadi kesalahan saat mengirim OTP.'
+        'Terjadi kesalahan saat mengirim OTP.'
       );
     } finally {
       setLoading(false);
@@ -56,113 +58,85 @@ function ForgotPassword() {
   }
 
   return (
-    <main className="auth-page">
+    <main className="forgot-page">
 
-      {/* LEFT PANEL */}
-      <section className="auth-panel">
+      <section className="forgot-content">
 
-        {/* BRAND */}
-        <div className="auth-brand">
-          <img
-            src="/node-logo.png"
-            alt="Node logo"
-            className="auth-brand-logo"
-          />
+        {/* ICON */}
+        <img
+          src="/Password.png"
+          alt="Password recovery"
+          className="forgot-icon"
+        />
 
-          <span className="auth-brand-name">
-            node
-          </span>
+        {/* HEADING */}
+        <div className="forgot-heading">
+          <h1>Forgot your password?</h1>
+
+          <p>
+            Please enter the Email associated with your
+            account and we’ll send an OTP.
+          </p>
         </div>
 
-        {/* CONTENT */}
-        <div className="auth-content">
+        {/* FORM */}
+        <form
+          className="forgot-form"
+          onSubmit={handleSubmit}
+        >
 
-          <div className="auth-heading">
-            <h1>
-              Forgot your password?
-            </h1>
+          <div className="forgot-field">
+            <label htmlFor="forgot-email">
+              Email address
+            </label>
 
-            <p>
-              Enter your registered email address
-              and we’ll send you a verification code
-              to reset your password.
-            </p>
+            <input
+              type="email"
+              id="forgot-email"
+              value={email}
+              onChange={handleEmailChange}
+              placeholder="Enter your email"
+              autoComplete="email"
+              required
+            />
           </div>
 
-          <form
-            className="auth-form"
-            onSubmit={handleSubmit}
-          >
-
-            <div className="auth-field">
-              <label htmlFor="email">
-                Email address
-              </label>
-
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={handleEmailChange}
-                placeholder="e.g. fict@krw.horizon.ac.id"
-                autoComplete="email"
-                required
-              />
-            </div>
-
-            {/* MESSAGE */}
-            {error && (
-              <div className="auth-message auth-message-error">
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="auth-message auth-message-success">
-                {success}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="auth-submit"
-              disabled={loading}
+          {/* ERROR */}
+          {error && (
+            <div
+              className="forgot-message forgot-message-error"
+              role="alert"
             >
-              {loading
-                ? 'Sending OTP...'
-                : 'Send OTP'}
-            </button>
+              {error}
+            </div>
+          )}
 
-          </form>
+          {/* SUCCESS */}
+          {success && (
+            <div
+              className="forgot-message forgot-message-success"
+              role="status"
+            >
+              {success}
+            </div>
+          )}
 
-          {/* BACK TO LOGIN */}
-          <p className="auth-register">
-            Remember your password?
+          {/* SUBMIT */}
+          <button
+            type="submit"
+            className="forgot-submit"
+            disabled={loading}
+          >
+            {loading ? 'Sending OTP...' : 'Reset Password'}
+          </button>
 
-            <Link to="/login">
-              Sign in
-            </Link>
-          </p>
+        </form>
 
-        </div>
-
-        {/* FOOTER */}
-        <footer className="auth-footer">
-          © 2026 node. All Rights Reserved.
-        </footer>
-
-      </section>
-
-      {/* RIGHT IMAGE */}
-      <section className="auth-image-panel">
-
-        <div className="auth-image-wrapper">
-          <img
-            src="/node-auth-image.png"
-            alt="Node community"
-            className="auth-image"
-          />
-        </div>
+        {/* BACK TO LOGIN */}
+        <Link to="/login" className="forgot-back">
+          <span aria-hidden="true">←</span>
+          Back to log in
+        </Link>
 
       </section>
 

@@ -2,8 +2,7 @@
 const USER_KEY = 'node_mock_user';
 const ACCOUNTS_KEY = 'node_mock_accounts';
 
-// true = gunakan autentikasi dummy selama backend belum siap
-export const USE_MOCK_AUTH = true;
+export const USE_MOCK_AUTH = false;
 
 export function getMockUser() {
   try {
